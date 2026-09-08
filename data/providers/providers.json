@@ -1,0 +1,49 @@
+{
+  "providers": {
+    "morgan_price": {
+      "name": "Morgan Price (Europe) ApS",
+      "aliases": [
+        "Morgan Price",
+        "Morgan Price Europe",
+        "MP"
+      ],
+      "allowed_hosts": [
+        "morgan-price.eu",
+        "www.morgan-price.eu"
+      ],
+      "seed_facts": [
+        "Morgan Price was formed in 1999 as a product provider in the international healthcare insurance market.",
+        "Morgan Price (Europe) ApS was formed in 2020 to support EU partners and members.",
+        "Morgan Price (Europe) ApS describes itself as an MGA/MGU rather than an insurer.",
+        "Morgan Price (Europe) ApS states that it is authorised and regulated in Denmark by the Danish Financial Supervisory Authority (DFSA), FTID 36351."
+      ],
+      "sources": [
+        {
+          "kind": "about",
+          "url": "https://morgan-price.eu/about-us/",
+          "client_safe": true
+        },
+        {
+          "kind": "individual",
+          "url": "https://morgan-price.eu/individual/",
+          "client_safe": true
+        },
+        {
+          "kind": "group",
+          "url": "https://morgan-price.eu/group/",
+          "client_safe": true
+        },
+        {
+          "kind": "intermediaries",
+          "url": "https://morgan-price.eu/intermediaries/",
+          "client_safe": false
+        },
+        {
+          "kind": "downloads",
+          "url": "https://morgan-price.eu/downloads/",
+          "client_safe": true
+        }
+      ]
+    }
+  }
+}
