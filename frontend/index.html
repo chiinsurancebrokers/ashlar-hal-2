@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1727">
+<title>HAL 2.0 | Ashlar Assurance</title>
+<style>
+:root{--ink:#102033;--muted:#697789;--line:#dfe5ec;--white:#fff;--navy:#0c1727;--accent:#b88743;--soft:#eef2f6;--green:#4c8e6b;--shadow:0 22px 70px rgba(12,23,39,.12)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f8fafc,#edf2f6);color:var(--ink);min-height:100vh}
+button,input,textarea{font:inherit}.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(255,255,255,.9);border-bottom:1px solid rgba(16,32,51,.08);backdrop-filter:blur(14px)}
+.brand{letter-spacing:.17em;font-weight:850;font-size:15px}.brand span{display:block;font-size:9px;letter-spacing:.28em;color:var(--muted);margin-top:4px}.badge{font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:white}
+.shell{width:min(1200px,94vw);margin:34px auto;display:grid;grid-template-columns:.86fr 1.14fr;gap:38px;align-items:start}
+.hero{padding:36px 10px}.kicker{text-transform:uppercase;letter-spacing:.15em;font-size:12px;font-weight:800;color:var(--accent)}
+h1{font-size:clamp(44px,5.1vw,72px);line-height:.99;letter-spacing:-.055em;margin:18px 0 22px;max-width:600px}.lead{font-size:18px;line-height:1.62;color:var(--muted);max-width:580px}.trust{display:flex;gap:17px;flex-wrap:wrap;margin-top:30px}.trust span{font-size:13px;color:var(--muted)}.trust span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:8px}
+.panel{background:var(--white);border:1px solid rgba(16,32,51,.08);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;min-height:690px;display:flex;flex-direction:column}
+.panel-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.hal-id{display:flex;align-items:center;gap:13px}.orb{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff 0 5%,#d8c8aa 6% 11%,#b78a48 12% 28%,#25415f 29% 57%,#0b1626 58% 100%);box-shadow:0 0 0 6px #f1f4f7,0 8px 24px rgba(12,23,39,.18)}.hal-name{font-weight:850}.status{font-size:12px;color:var(--green);margin-top:3px}
+.chat{padding:24px;display:flex;flex-direction:column;gap:14px;overflow:auto;min-height:455px;max-height:505px;background:linear-gradient(#fff,#fbfcfd)}.msg{max-width:88%;padding:13px 16px;border-radius:17px;font-size:14px;line-height:1.55;white-space:pre-wrap}.hal{align-self:flex-start;background:#f0f3f6;border-bottom-left-radius:6px}.user{align-self:flex-end;background:var(--navy);color:white;border-bottom-right-radius:6px}
+.source-note{font-size:10px;color:var(--muted);margin-top:6px}.quotes{display:grid;gap:8px;margin-top:10px}.quote{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 13px;display:grid;grid-template-columns:1fr auto;gap:3px 12px}.provider{font-weight:800;font-size:12px}.plan{color:var(--muted);font-size:12px}.price{grid-column:2;grid-row:1/3;font-weight:900;align-self:center}.verified{font-size:10px;color:var(--green);grid-column:1/3}
+.quick{padding:0 22px 12px;display:flex;gap:8px;flex-wrap:wrap;background:#fff}.chip{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:999px;font-size:12px;cursor:pointer}.chip:hover{border-color:#aeb9c5}
+.composer{border-top:1px solid var(--line);padding:16px 18px;background:#fff}.row{display:flex;gap:9px;align-items:flex-end}.text{resize:none;flex:1;min-height:48px;max-height:120px;padding:13px 14px;border:1px solid var(--line);border-radius:15px;outline:none}.text:focus{border-color:#a0afbf;box-shadow:0 0 0 3px #edf1f5}.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:800;cursor:pointer}.primary{background:var(--navy);color:white}.soft{background:var(--soft);color:var(--ink)}.mic{width:48px;height:48px;padding:0;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center}.mic.recording{background:#8a2f2f;color:#fff;animation:micpulse 1s ease-in-out infinite}@keyframes micpulse{50%{transform:scale(1.06)}}.transcribe-status{font-size:10px;color:var(--muted);min-height:14px;margin-top:7px}.meta{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:10px;color:var(--muted)}
+.footer{width:min(1200px,94vw);margin:0 auto 28px;font-size:10px;line-height:1.5;color:var(--muted)}
+@media(max-width:900px){.shell{grid-template-columns:1fr;margin-top:12px;gap:14px}.hero{padding-top:18px}.panel{min-height:620px}h1{font-size:48px}}
+@media(max-width:520px){.shell{width:96vw}.topbar{padding:0 3vw}.brand{font-size:12px}.hero{padding:20px 6px}h1{font-size:42px}.chat{padding:16px}.panel{border-radius:22px}.msg{max-width:94%}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand">ASHLAR ASSURANCE<span>INTERNATIONAL HEALTH INSURANCE</span></div>
+ <div class="badge">HAL 2.0 · Voice + Provider-aware</div>
+</header>
+<main class="shell">
+ <section class="hero">
+  <div class="kicker">Insurance intelligence, with evidence</div>
+  <h1>Ask naturally.<br>HAL checks the facts.</h1>
+  <p class="lead">Type or speak naturally to HAL. Ask about international vs local insurance, a provider, or the healthcare system in your destination. HAL can understand the applicant, calculate verified rate data and explain providers using their official sources — without allowing AI to invent premiums or policy benefits.</p>
+  <div class="trust"><span>Deterministic pricing</span><span>Official provider sources</span><span>Evidence-locked benefits</span></div>
+ </section>
+ <section class="panel">
+  <div class="panel-head">
+   <div class="hal-id"><div class="orb"></div><div><div class="hal-name">HAL</div><div class="status">● Online</div></div></div>
+   <button class="btn soft" onclick="resetHal()">Start again</button>
+  </div>
+  <div class="chat" id="chat"></div>
+  <div class="quick">
+   <button class="chip" onclick="sendPreset('I would like an international health insurance quotation.')">Get a quote</button>
+   <button class="chip" onclick="sendPreset('Tell me about Morgan Price Europe.')">About Morgan Price</button>
+   <button class="chip" onclick="sendPreset('Why should I consider international health insurance instead of a local private plan?')">Why international?</button>
+   <button class="chip" onclick="sendPreset('Explain the healthcare system in Greece and how it affects my insurance choice.')">Healthcare in Greece</button>
+   <button class="chip" onclick="sendPreset('I am an affluent local resident and I want comprehensive private health protection with international hospital choice. Why would IPMI be relevant to me?')">HNWI / comprehensive</button>
+   <button class="chip" onclick="sendPreset('I need strong outpatient and mental health cover.')">Outpatient + mental health</button>
+  </div>
+  <div class="composer">
+   <div class="row">
+    <textarea id="input" class="text" placeholder="Tell HAL what you need…" onkeydown="keySend(event)"></textarea>
+    <button class="btn soft mic" id="mic" onclick="toggleRecording()" title="Speak to HAL" aria-label="Speak to HAL">🎙</button>
+    <button class="btn primary" id="send" onclick="sendMessage()">Send</button>
+   </div>
+   <div class="transcribe-status" id="transcribeStatus"></div>
+   <div class="meta"><span>Rates are calculated by HAL's deterministic engine.</span><button class="chip" onclick="speakLast()">🔊 Hear HAL</button></div>
+  </div>
+ </section>
+</main>
+<div class="footer">HAL is an Ashlar Assurance decision-support tool. Morgan Price quotations use the official 2026 rate workbook and Morgan Price benefit matching uses the official 04/26 Table of Benefits. Other carriers may remain on clearly-labelled legacy data until their current official datasets are loaded. Final eligibility, underwriting, cover and premium remain subject to insurer confirmation.</div>
+<script>
+const chat=document.getElementById('chat'), input=document.getElementById('input'), send=document.getElementById('send');
+let state={}, history=[], lastReply='', lastSources=[], lastKnowledgeSources=[];
+let mediaRecorder=null, mediaStream=null, audioChunks=[], recordingTimer=null, recordingStartedAt=0;
+
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function addMsg(text,who='hal',sources=[],quotes=[]){
+ const box=document.createElement('div'); box.className='msg '+who;
+ let html=esc(text).replace(/\n/g,'<br>');
+ if(quotes&&quotes.length){
+   html+='<div class="quotes">';
+   quotes.slice(0,5).forEach(q=>{
+     const p=Number(q.premium||0);
+     const verified=q.official_rate?'✓ Official rate':'Legacy rate';
+     html+=`<div class="quote"><div class="provider">${esc(q.insurer)}</div><div class="plan">${esc(q.product_name)}</div><div class="price">€${p.toLocaleString()}</div><div class="verified">${esc(verified)}${q.requirements_score===1?' · verified requirements match':''}</div></div>`;
+   });
+   html+='</div>';
+ }
+ if(sources&&sources.length) html+=`<div class="source-note">Sources used: ${sources.map(esc).join(' · ')}</div>`;
+ box.innerHTML=html; chat.appendChild(box); chat.scrollTop=chat.scrollHeight;
+}
+function resetHal(){
+ state={};history=[];lastReply='';lastSources=[];lastKnowledgeSources=[];chat.innerHTML='';
+ addMsg("Hello. I’m HAL, Ashlar Assurance’s international health insurance assistant.\n\nYou can type or tap the microphone and speak naturally. I can also answer questions about providers using their official sources.");
+ input.value='';
+const ts=document.getElementById('transcribeStatus'); if(ts) ts.textContent='';
+input.focus();
+}
+function keySend(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function sendPreset(t){input.value=t;sendMessage()}
+
+function preferredMimeType(){
+ const candidates=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
+ if(!window.MediaRecorder)return '';
+ return candidates.find(t=>MediaRecorder.isTypeSupported(t))||'';
+}
+async function toggleRecording(){
+ if(mediaRecorder && mediaRecorder.state==='recording'){stopRecording();return}
+ await startRecording();
+}
+async function startRecording(){
+ const mic=document.getElementById('mic'), status=document.getElementById('transcribeStatus');
+ if(!navigator.mediaDevices || !window.MediaRecorder){
+   status.textContent='Voice recording is not supported by this browser.';
+   return;
+ }
+ try{
+   mediaStream=await navigator.mediaDevices.getUserMedia({audio:true});
+   const mime=preferredMimeType();
+   mediaRecorder=mime?new MediaRecorder(mediaStream,{mimeType:mime}):new MediaRecorder(mediaStream);
+   audioChunks=[];recordingStartedAt=Date.now();
+   mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)audioChunks.push(e.data)};
+   mediaRecorder.onstop=uploadRecording;
+   mediaRecorder.start(250);
+   mic.classList.add('recording');mic.textContent='■';mic.title='Stop recording';
+   status.textContent='Listening… click stop when you are finished. Maximum 90 seconds.';
+   recordingTimer=setTimeout(stopRecording,90000);
+ }catch(e){
+   status.textContent='Microphone permission was not granted.';
+ }
+}
+function stopRecording(){
+ if(recordingTimer){clearTimeout(recordingTimer);recordingTimer=null}
+ const mic=document.getElementById('mic');
+ if(mediaRecorder && mediaRecorder.state==='recording')mediaRecorder.stop();
+ if(mic){mic.classList.remove('recording');mic.textContent='🎙';mic.title='Speak to HAL'}
+}
+async function uploadRecording(){
+ const status=document.getElementById('transcribeStatus');
+ try{
+   const type=mediaRecorder?.mimeType||'audio/webm';
+   const blob=new Blob(audioChunks,{type});
+   audioChunks=[];
+   if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null}
+   if(blob.size<1000){status.textContent='The recording was too short. Please try again.';return}
+   status.textContent='Transcribing…';
+   const ext=type.includes('ogg')?'ogg':type.includes('mp4')?'m4a':'webm';
+   const form=new FormData();
+   form.append('file',blob,'hal-recording.'+ext);
+   const r=await fetch('/api/v1/transcribe',{method:'POST',body:form});
+   const d=await r.json();
+   if(!r.ok)throw new Error(d.detail||'Transcription failed');
+   const current=input.value.trim();
+   input.value=current ? current+' '+d.text : d.text;
+   status.textContent='Transcription ready — review it, then press Send.';
+   input.focus();
+ }catch(e){
+   if(mediaStream){mediaStream.getTracks().forEach(t=>t.stop());mediaStream=null}
+   status.textContent='Transcription unavailable: '+e.message;
+ }
+}
+
+async function sendMessage(){
+ const text=input.value.trim();if(!text)return;
+ addMsg(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;send.textContent='…';
+ try{
+  const r=await fetch('/api/v1/chat/turn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,state,history:history.slice(0,-1)})});
+  const d=await r.json();if(!r.ok)throw new Error(d.detail||'HAL service error');
+  state=d.state||state;lastReply=d.reply||'';lastSources=d.provider_sources_used||[];lastKnowledgeSources=d.knowledge_sources_used||[];
+  addMsg(lastReply,'hal',[...lastSources,...lastKnowledgeSources],d.quotes||[]);
+  history.push({role:'assistant',content:lastReply});
+ }catch(e){addMsg("I couldn't complete that turn. "+e.message);}
+ finally{send.disabled=false;send.textContent='Send';input.focus()}
+}
+async function speakLast(){
+ if(!lastReply)return;
+ try{
+  const lang=/[\u0370-\u03ff]/.test(lastReply)?'el':'en';
+  const r=await fetch('/api/v1/voice/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:lastReply.slice(0,2400),language:lang})});
+  if(!r.ok){const d=await r.json();throw new Error(d.detail||'Voice unavailable')}
+  const blob=await r.blob();new Audio(URL.createObjectURL(blob)).play();
+ }catch(e){addMsg("Voice is not available yet: "+e.message)}
+}
+resetHal();
+</script>
+</body>
+</html>
