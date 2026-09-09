@@ -1,0 +1,20 @@
+{
+  "source_filename": "Rates.xlsx",
+  "sha256": "0b2052dfdebac3b7b2a42f4d9aaa2a6a4f82874340001d920f53ff8515556816",
+  "rate_version": "morgan_price_europe_2026_official",
+  "rows": 240,
+  "areas": [
+    "Europe",
+    "Worldwide excluding USA, Singapore, Hong Kong & China",
+    "Worldwide excluding USA",
+    "Worldwide"
+  ],
+  "plans": [
+    "standard",
+    "standard_plus",
+    "comprehensive",
+    "premium",
+    "elite"
+  ],
+  "note": "Premiums normalized to the 2-decimal values displayed in the official workbook; raw floating values retained for audit."
+}
