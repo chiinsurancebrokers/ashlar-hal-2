@@ -1,0 +1,104 @@
+{
+  "topic": "affluent_hnwi_ipmi_need_recognition",
+  "last_curated": "2026-09-08",
+  "purpose": "Help HAL recognise affluent local nationals and HNWI clients whose insurance objective is comprehensive control, choice and continuity rather than merely basic access to healthcare.",
+  "recognition_signals": [
+    "The client explicitly describes themselves as affluent, HNWI, high-net-worth, wealthy, executive, entrepreneur, business owner or family-office client.",
+    "The client says budget is secondary to quality, breadth or certainty of cover.",
+    "The client wants access to leading private hospitals or named international centres.",
+    "The client wants the option to seek planned treatment outside the country of residence.",
+    "The client wants private-room treatment, high annual limits, cancer/complex-care protection, broad outpatient cover or other comprehensive benefits under one contract.",
+    "The client splits time between countries, owns homes in multiple countries, travels frequently or expects future relocation.",
+    "The client values continuity of underwriting/cover if residence changes.",
+    "The client wants direct billing, international assistance, medical evacuation or cross-border case management.",
+    "The client wants a long-term comprehensive policy even though they are a local national rather than an expatriate."
+  ],
+  "core_value_dimensions": [
+    {
+      "id": "choice",
+      "title": "Choice of provider and treatment location",
+      "argument": "For an affluent/HNWI client, the issue may be the freedom to choose private hospitals, specialists or treatment locations rather than reliance on a single domestic network.",
+      "caveat": "Do not claim every IPMI policy permits unrestricted provider choice; verify the specific policy/network and pre-authorisation rules."
+    },
+    {
+      "id": "cross_border",
+      "title": "Cross-border planned treatment",
+      "argument": "An HNWI client may value the option to obtain eligible planned treatment in another country, including the home country or an international centre of excellence.",
+      "caveat": "Actual geographical cover and planned-treatment rules must be verified from the selected policy."
+    },
+    {
+      "id": "continuity",
+      "title": "Long-term continuity and portability",
+      "argument": "For clients whose residence or lifestyle may change, a portable international policy may reduce the need to replace a domestic policy solely because they move.",
+      "caveat": "Portability is not automatic in every destination. Eligibility, pricing and regulation can change after relocation."
+    },
+    {
+      "id": "financial_ceiling",
+      "title": "High financial ceilings for complex care",
+      "argument": "HNWI clients often seek high annual limits and fewer restrictive benefit sublimits so that a serious cancer, transplant or complex admission is not constrained by a modest domestic sublimit.",
+      "caveat": "Do not assume a local plan has low limits. Compare the actual local and international contracts."
+    },
+    {
+      "id": "service",
+      "title": "International service infrastructure",
+      "argument": "Direct billing, international assistance, multilingual claims support and medical case coordination may be important to clients who value convenience and reduced administrative friction.",
+      "caveat": "Service levels vary by insurer, country, provider and claim type."
+    },
+    {
+      "id": "comprehensive_single_contract",
+      "title": "Comprehensive protection under one contract",
+      "argument": "Some HNWI clients prefer one contract combining inpatient, outpatient, diagnostics, mental health, dental, optical, maternity or wellness benefits rather than assembling fragmented domestic solutions.",
+      "caveat": "Not every IPMI plan contains every benefit; modules, waiting periods and limits must be verified."
+    },
+    {
+      "id": "local_national",
+      "title": "Local nationals can have an IPMI need",
+      "argument": "International health insurance can be relevant to an affluent local national even with no expatriate status when their objective is international provider choice, broader geographic treatment options or long-term comprehensive protection.",
+      "caveat": "Carrier eligibility for local nationals must be checked. Some products are designed primarily for expatriates or require prior approval for local nationals."
+    }
+  ],
+  "what_not_to_say": [
+    "Do not say a local plan can never be comprehensive.",
+    "Do not say a wealthy client 'needs' IPMI merely because they are wealthy.",
+    "Do not imply that the public system is unsafe or clinically inferior.",
+    "Do not use out-of-pocket statistics as proof that insured people were denied claims.",
+    "Do not infer that people paying out of pocket were uninsured.",
+    "Do not promise access to any named hospital without checking network/direct-billing rules.",
+    "Do not equate high annual limits with unlimited cover."
+  ],
+  "suggested_discovery_questions": [
+    "If you needed major treatment, would you want the option to choose a hospital outside your country of residence?",
+    "Is keeping the same long-term cover if you move country important to you?",
+    "Do you want unrestricted or broad private-hospital choice to be a priority?",
+    "Would you prefer a comprehensive plan including outpatient and additional benefits, or mainly catastrophic inpatient protection?",
+    "Is your priority lowest premium, or maximum breadth and flexibility of cover?",
+    "Would direct settlement with major hospitals and international assistance be valuable to you?"
+  ],
+  "sources": [
+    {
+      "name": "APRIL International - Local vs international health insurance",
+      "url": "https://www.april-international.com/en/long-term-international-health-insurance/guide/should-you-choose-local-or-international-health-insurance-plan",
+      "type": "commercial_education"
+    },
+    {
+      "name": "APRIL International - Portability",
+      "url": "https://www.april-international.com/en/long-term-international-health-insurance/guide/understanding-health-insurance-portability-across-countries",
+      "type": "commercial_education"
+    },
+    {
+      "name": "Cigna Global - International vs local plans",
+      "url": "https://www.cignaglobal.com/blog/thought-leadership/international-health-insurance-versus-local-plans",
+      "type": "commercial_education"
+    },
+    {
+      "name": "William Russell - Local vs international vs travel insurance",
+      "url": "https://www.william-russell.com/international-health-insurance/differences-between-local-international-travel-insurance/",
+      "type": "commercial_education"
+    }
+  ],
+  "argumentation_rules": [
+    "When a client can afford comprehensive private cover and values timely access, explain clearly that private insurance can be a rational way to avoid relying exclusively on public waiting lists.",
+    "For affluent locals, frame private insurance as purchasing access, choice, predictability and service rather than as abandoning the public system.",
+    "Where the destination public system shows measurable access constraints, connect those constraints explicitly to the client's insurance objectives."
+  ]
+}
