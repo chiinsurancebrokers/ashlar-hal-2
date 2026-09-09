@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1727">
+<title>HAL | Ashlar Assurance</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%235747e8'/%3E%3Ctext x='32' y='39' font-family='Arial' font-size='18' font-weight='700' text-anchor='middle' fill='white'%3EH%3C/text%3E%3C/svg%3E">
+<style>
+:root{--ink:#102033;--muted:#697789;--line:#dfe5ec;--white:#fff;--navy:#0c1727;--accent:#b88743;--soft:#eef2f6;--green:#4c8e6b;--shadow:0 22px 70px rgba(12,23,39,.12)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f8fafc,#edf2f6);color:var(--ink);min-height:100vh}
+button,input,textarea{font:inherit}.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(255,255,255,.9);border-bottom:1px solid rgba(16,32,51,.08);backdrop-filter:blur(14px)}
+.brand{letter-spacing:.17em;font-weight:850;font-size:15px}.brand span{display:block;font-size:9px;letter-spacing:.28em;color:var(--muted);margin-top:4px}.badge{font-size:12px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:white}
+.shell{width:min(1200px,94vw);margin:34px auto;display:grid;grid-template-columns:.86fr 1.14fr;gap:38px;align-items:start}
+.hero{padding:36px 10px}.kicker{text-transform:uppercase;letter-spacing:.15em;font-size:12px;font-weight:800;color:var(--accent)}
+h1{font-size:clamp(44px,5.1vw,72px);line-height:.99;letter-spacing:-.055em;margin:18px 0 22px;max-width:600px}.lead{font-size:18px;line-height:1.62;color:var(--muted);max-width:580px}.trust{display:flex;gap:17px;flex-wrap:wrap;margin-top:30px}.trust span{font-size:13px;color:var(--muted)}.trust span:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:8px}
+.panel{background:var(--white);border:1px solid rgba(16,32,51,.08);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;min-height:690px;display:flex;flex-direction:column}
+.panel-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.hal-id{display:flex;align-items:center;gap:13px}.orb{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff 0 5%,#d8c8aa 6% 11%,#b78a48 12% 28%,#25415f 29% 57%,#0b1626 58% 100%);box-shadow:0 0 0 6px #f1f4f7,0 8px 24px rgba(12,23,39,.18)}.hal-name{font-weight:850}.status{font-size:12px;color:var(--green);margin-top:3px}
+.chat{padding:24px;display:flex;flex-direction:column;gap:14px;overflow:auto;min-height:455px;max-height:505px;background:linear-gradient(#fff,#fbfcfd)}.msg{max-width:88%;padding:13px 16px;border-radius:17px;font-size:14px;line-height:1.55;white-space:pre-wrap}.hal{align-self:flex-start;background:#f0f3f6;border-bottom-left-radius:6px}.user{align-self:flex-end;background:var(--navy);color:white;border-bottom-right-radius:6px}
+.source-note{font-size:10px;color:var(--muted);margin-top:6px}.quotes{display:grid;gap:8px;margin-top:10px}.quote{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 13px;display:grid;grid-template-columns:1fr auto;gap:3px 12px}.provider{font-weight:800;font-size:12px}.plan{color:var(--muted);font-size:12px}.price{grid-column:2;grid-row:1/3;font-weight:900;align-self:center}.verified{font-size:10px;color:var(--green);grid-column:1/3}
+.quick{padding:0 22px 12px;display:flex;gap:8px;flex-wrap:wrap;background:#fff}.chip{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:999px;font-size:12px;cursor:pointer}.chip:hover{border-color:#aeb9c5}
+.composer{border-top:1px solid var(--line);padding:16px 18px;background:#fff}.row{display:flex;gap:9px;align-items:flex-end}.text{resize:none;flex:1;min-height:48px;max-height:120px;padding:13px 14px;border:1px solid var(--line);border-radius:15px;outline:none}.text:focus{border-color:#a0afbf;box-shadow:0 0 0 3px #edf1f5}.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:800;cursor:pointer}.primary{background:var(--navy);color:white}.soft{background:var(--soft);color:var(--ink)}.mic{width:48px;height:48px;padding:0;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center}.mic.recording{background:#8a2f2f;color:#fff;animation:micpulse 1s ease-in-out infinite}@keyframes micpulse{50%{transform:scale(1.06)}}.transcribe-status{font-size:10px;color:var(--muted);min-height:14px;margin-top:7px}.meta{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:10px;color:var(--muted)}
+.footer{width:min(1200px,94vw);margin:0 auto 28px;font-size:10px;line-height:1.5;color:var(--muted)}
+@media(max-width:900px){.shell{grid-template-columns:1fr;margin-top:12px;gap:14px}.hero{padding-top:18px}.panel{min-height:620px}h1{font-size:48px}}
+@media(max-width:520px){.shell{width:96vw}.topbar{padding:0 3vw}.brand{font-size:12px}.hero{padding:20px 6px}h1{font-size:42px}.chat{padding:16px}.panel{border-radius:22px}.msg{max-width:94%}}
+
+.lead-cta{margin-top:12px;width:100%;background:#fff;border:1px solid #cbd4de;border-radius:13px;padding:11px 13px;font-weight:800;color:var(--navy);cursor:pointer}
+.lead-cta:hover{border-color:var(--accent)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(7,17,29,.62);z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.open{display:flex}
+.modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25)}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:start;position:sticky;top:0;background:#fff;z-index:2}
+.modal-head h2{margin:0;font-size:23px;letter-spacing:-.02em}.modal-sub{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}.close{border:0;background:var(--soft);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px}
+.form-body{padding:22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:800;color:#394a5d}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;background:#fff}.field textarea{min-height:95px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#9aa9ba;box-shadow:0 0 0 3px #edf1f5}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:11px;line-height:1.45;color:var(--muted);margin-top:16px}.consent input{margin-top:2px}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.form-status{font-size:12px;margin-top:12px;min-height:18px}.form-status.ok{color:#327457}.form-status.err{color:#9a3434}.privacy-note{font-size:10px;color:var(--muted);line-height:1.5;margin-top:10px}
+.honeypot{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+@media(max-width:620px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.modal-backdrop{padding:6px}.modal{border-radius:18px;max-height:96vh}.form-body{padding:16px}}
+
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px;width:min(950px,88vw)}
+.quote-card{position:relative;background:#fff;border:1px solid #e1e5eb;border-radius:16px;padding:18px 16px 16px;box-shadow:0 6px 18px rgba(12,23,39,.04);min-width:0;color:var(--ink)}
+.quote-card.recommended{border:1.5px solid #8066ff;box-shadow:0 10px 26px rgba(102,78,226,.12)}
+.rec-ribbon{position:absolute;left:0;top:0;background:#6252d9;color:#fff;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border-radius:14px 0 10px 0;padding:5px 9px}
+.q-head{display:flex;align-items:center;gap:10px;margin-top:3px}.q-logo{width:34px;height:34px;border-radius:8px;background:#14244e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex:0 0 auto}.q-logo.img{background:#0c6d47}.q-logo.apr{background:#6c2ea7}
+.q-plan{font-weight:900;font-size:14px;line-height:1.2}.q-provider{font-size:10px;color:#8993a0;margin-top:3px}
+.q-price{margin:18px 0 4px;font-size:29px;font-weight:500;color:#6349de;letter-spacing:-.04em}.q-price span{font-size:11px;color:#a0a7b1;letter-spacing:0}.q-month{font-size:10px;color:#a0a7b1;margin-bottom:13px}
+.q-divider{height:1px;background:#edf0f3;margin:11px 0}.q-spec{display:grid;grid-template-columns:78px 1fr;gap:7px 9px;font-size:10px;line-height:1.35;margin-top:7px}.q-spec b{color:#a1a8b1;font-weight:600}.q-spec span{color:#48576a}
+.q-why{font-size:10px;line-height:1.4;color:#8069e7;font-style:italic;margin:14px 0 16px;min-height:28px}
+.q-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.q-actions button{border-radius:8px;padding:9px 8px;font-size:10px;font-weight:850;cursor:pointer}.q-primary{background:#5b38df;color:white;border:0}.q-secondary{background:#f5f5f7;color:#495464;border:1px solid #e1e3e7}
+.q-note{font-size:9px;color:#8b95a2;margin-top:9px}
+@media(max-width:980px){.quotes{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.quotes{grid-template-columns:1fr;width:100%}.quote-card{padding:17px}.q-price{font-size:27px}}
+
+/* HAL v8 UX */
+.progress-wrap{padding:12px 22px 10px;background:#fff;border-bottom:1px solid var(--line)}
+.progress-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pstep{font-size:10px;color:#98a2ae;font-weight:750;display:flex;gap:7px;align-items:center}.pstep i{width:19px;height:19px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#edf1f5;font-style:normal}.pstep.active{color:var(--navy)}.pstep.active i,.pstep.done i{background:var(--navy);color:#fff}.pstep.done{color:#657487}.progress-line{height:3px;background:#edf1f5;border-radius:4px;margin-top:9px;overflow:hidden}.progress-fill{height:100%;width:12%;background:linear-gradient(90deg,#0c1727,#7a63e8);transition:width .35s ease}
+.needs-wrap{padding:12px 22px;background:#fbfcfd;border-bottom:1px solid var(--line)}.needs-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}.needs-title{font-size:11px;font-weight:850;color:#435266}.needs-edit{border:0;background:transparent;color:#6a55dc;font-size:11px;font-weight:800;cursor:pointer}.needs-chips{display:flex;gap:7px;flex-wrap:wrap}.need-chip{background:white;border:1px solid #dfe5ec;border-radius:999px;padding:6px 9px;font-size:10px;color:#445466;cursor:pointer}.need-chip.must{border-color:#b8adef;background:#f7f5ff;color:#5844c8}.need-empty{font-size:10px;color:#98a2ae}
+.composer{position:sticky;bottom:0;z-index:15;box-shadow:0 -10px 30px rgba(12,23,39,.04)}
+.thinking{align-self:flex-start;background:#f0f3f6;border-radius:17px;border-bottom-left-radius:6px;padding:12px 15px;font-size:12px;color:#697789}.thinking-dots span{display:inline-block;width:5px;height:5px;background:#778698;border-radius:50%;margin-left:3px;animation:td 1.1s infinite}.thinking-dots span:nth-child(2){animation-delay:.15s}.thinking-dots span:nth-child(3){animation-delay:.3s}@keyframes td{0%,70%,100%{opacity:.25;transform:translateY(0)}35%{opacity:1;transform:translateY(-3px)}}
+.q-badges{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}.q-badge{font-size:9px;font-weight:800;padding:5px 7px;border-radius:999px;background:#f1eefc;color:#5b48c6}.q-checks{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.q-check{font-size:9px;padding:4px 7px;border-radius:7px;background:#ecf7f0;color:#347354}.compare-pick{position:absolute;top:12px;right:12px;z-index:3;background:white;border:1px solid #dfe5ec;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:800;cursor:pointer}.quote-card.recommended .compare-pick{top:30px}.compare-pick.selected{background:#0c1727;color:#fff;border-color:#0c1727}
+.compare-tray{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(130%);z-index:45;background:#0c1727;color:white;border-radius:18px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 18px 50px rgba(12,23,39,.28);transition:transform .25s}.compare-tray.show{transform:translateX(-50%) translateY(0)}.compare-tray span{font-size:12px;font-weight:750}.compare-tray button{border:0;border-radius:12px;padding:9px 13px;font-weight:850;cursor:pointer}.compare-go{background:#fff;color:#0c1727}.compare-clear{background:transparent;color:#b9c3cf}
+.compare-modal{width:min(1050px,96vw);max-height:94vh}.compare-toolbar{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;gap:9px;flex-wrap:wrap;align-items:center}.compare-toolbar button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer}.compare-toolbar .strong{background:#0c1727;color:#fff;border-color:#0c1727}.compare-body{padding:20px;overflow:auto}.compare-grid{display:grid;gap:0;border:1px solid var(--line);border-radius:15px;overflow:hidden;min-width:720px}.compare-row{display:grid;grid-template-columns:150px repeat(var(--compare-cols),minmax(180px,1fr))}.compare-row>div{padding:11px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;line-height:1.4}.compare-row>div:first-child{background:#f7f9fb;font-weight:850;color:#526173}.compare-plan{font-weight:850;font-size:12px}.compare-provider{font-size:9px;color:#8c96a2;margin-top:3px}.advanced-box{margin-top:16px;padding:15px;border-radius:14px;background:#f7f5ff;color:#5142b0;font-size:11px;line-height:1.5}
+.excluded-wrap{margin-top:12px}.excluded-btn{border:0;background:transparent;color:#697789;font-size:10px;text-decoration:underline;cursor:pointer;padding:0}.excluded-list{display:none;margin-top:8px;background:#f7f9fb;border-radius:10px;padding:9px 11px;font-size:10px;color:#667486}.excluded-list.open{display:block}.excluded-item{margin:5px 0}
+.email-mini{padding:20px}.email-mini .field{margin-bottom:12px}
+@media(max-width:650px){.progress-wrap{padding:10px 14px}.pstep{font-size:9px}.needs-wrap{padding:10px 14px}.quotes{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;width:calc(100vw - 48px)!important;padding:3px 2px 12px}.quote-card{min-width:min(82vw,330px);scroll-snap-align:center}.compare-tray{bottom:12px;width:calc(100vw - 24px);justify-content:space-between}.hero{display:none}.shell{margin-top:8px}.panel{min-height:calc(100vh - 90px)}.chat{max-height:none;min-height:54vh}.compare-modal{width:100vw;max-height:98vh;border-radius:18px}.compare-body{padding:12px}}
+
+.answer-options{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.answer-option{border:1px solid #cfd8e2;background:#fff;color:#17304c;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:750;cursor:pointer}.answer-option:hover{border-color:#7d8ea2;background:#f7f9fb}.plan-detail{margin-top:10px;background:#fff;border:1px solid #dfe5ec;border-radius:14px;padding:14px}.plan-detail h4{margin:0 0 7px;font-size:14px}.plan-detail .fit{color:#5c6c7e;font-size:12px;line-height:1.45;margin-bottom:10px}.detail-grid{display:grid;grid-template-columns:minmax(120px,.8fr) 1.5fr;gap:6px 10px;font-size:11px}.detail-grid b{color:#7b8795}.detail-caveat{margin-top:9px;font-size:10px;color:#8a6d36;line-height:1.45}.detail-limit{margin-top:9px;font-size:10px;color:#6f7c8b;line-height:1.45}
+
+/* ===== HAL 8.3 Adaptive Voice Adviser ===== */
+body{background:#f8fafc}
+.topbar{height:58px;padding:0 32px;border-bottom:1px solid rgba(16,32,51,.07)}
+.brand{font-size:14px}.brand span{font-size:8px}
+.topbar .badge{display:none}
+
+.welcome-stage{
+  min-height:calc(100vh - 58px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:42px 20px 54px;text-align:center;
+  transition:opacity .32s ease,transform .32s ease;
+}
+.welcome-stage.hidden{display:none}
+.welcome-kicker{
+  font-size:10px;font-weight:800;letter-spacing:.19em;text-transform:uppercase;
+  color:#9a733c;margin-bottom:20px
+}
+.voice-orb-wrap{display:flex;flex-direction:column;align-items:center}
+#halOrb{width:190px;height:190px;display:block;filter:drop-shadow(0 10px 28px rgba(80,69,210,.18));cursor:pointer}
+.orb-status-main{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8c82d9;min-height:16px;margin-top:2px}
+.product-switch{
+  display:flex;gap:8px;margin:24px 0 18px;padding:4px;background:#f1f3f7;border-radius:999px
+}
+.product-btn{
+  border:0;background:transparent;border-radius:999px;padding:10px 18px;
+  font-size:12px;font-weight:800;color:#687586;cursor:pointer;transition:.2s
+}
+.product-btn.active{background:#5747e8;color:#fff;box-shadow:0 5px 16px rgba(87,71,232,.22)}
+.welcome-bubble{
+  max-width:580px;border:1px solid #e1e5ea;background:#fff;border-radius:16px;
+  padding:15px 22px;font-size:15px;line-height:1.55;color:#334155;
+  box-shadow:0 8px 28px rgba(15,23,42,.04)
+}
+.welcome-mic-wrap{display:flex;flex-direction:column;align-items:center;margin-top:26px}
+.welcome-mic{
+  width:66px;height:66px;border-radius:50%;border:0;background:#5747e8;color:white;
+  display:grid;place-items:center;font-size:25px;cursor:pointer;
+  box-shadow:0 8px 24px rgba(87,71,232,.3);transition:.2s
+}
+.welcome-mic:hover{transform:translateY(-2px) scale(1.02)}
+.welcome-mic.recording{background:#b54747;animation:welcomePulse 1.15s infinite}
+@keyframes welcomePulse{50%{box-shadow:0 0 0 15px rgba(181,71,71,0)}}
+.welcome-mic-hint{font-size:11px;color:#98a2b1;margin-top:9px}
+.welcome-input-row{display:flex;gap:8px;width:min(520px,92vw);margin-top:17px}
+.welcome-input{
+  flex:1;border:1px solid #dde3e9;border-radius:12px;padding:12px 15px;
+  outline:none;background:#fff;font-size:14px
+}
+.welcome-input:focus{border-color:#9389eb;box-shadow:0 0 0 3px #f0efff}
+.welcome-send{border:0;border-radius:11px;background:#5747e8;color:#fff;padding:0 18px;font-weight:800;cursor:pointer}
+.welcome-transcribe{font-size:10px;color:#788596;min-height:15px;margin-top:7px}
+.welcome-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:26px;color:#8b96a4;font-size:10px}
+.welcome-trust span:before{content:"✓";color:#4c8e6b;margin-right:5px;font-weight:900}
+
+.shell.adviser-shell{
+  display:none;width:min(1040px,96vw);margin:22px auto 32px;grid-template-columns:1fr
+}
+body.adviser-active .shell.adviser-shell{display:grid}
+body.adviser-active .hero{display:none}
+body.adviser-active .panel{min-height:calc(100vh - 104px);max-height:none;border-radius:24px}
+.panel-head{padding:15px 20px}
+.hal-mini-orb{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:#f0efff;position:relative;overflow:hidden
+}
+.hal-mini-orb:before{
+  content:"";width:20px;height:20px;border:3px dotted #6657e7;border-radius:50%;
+  animation:minispin 6s linear infinite
+}
+@keyframes minispin{to{transform:rotate(360deg)}}
+body[data-hal-state="listening"] .hal-mini-orb:before{border-color:#b54747;animation-duration:1s}
+body[data-hal-state="thinking"] .hal-mini-orb:before{border-color:#5e8bd6;animation-duration:1.2s}
+body[data-hal-state="speaking"] .hal-mini-orb:before{border-color:#6657e7;animation-duration:.7s}
+.journey-badge{font-size:10px;color:#778494;margin-top:2px}
+.progress-wrap{padding:12px 20px 7px}
+.needs-wrap{margin:7px 20px 8px}
+.chat{
+  min-height:350px;max-height:none;flex:1;padding:18px 20px 28px;
+  background:linear-gradient(#fff,#fbfcfd)
+}
+.msg{font-size:14px;max-width:78%}
+.msg.hal{background:#f3f5f7}
+.quick{display:none!important}
+.guided-choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.guided-choice{
+  border:1px solid #d9dfe6;background:#fff;color:#26374a;padding:9px 12px;
+  border-radius:999px;font-size:11px;font-weight:750;cursor:pointer;transition:.18s
+}
+.guided-choice:hover{border-color:#7568e8;background:#f7f6ff;color:#5144cf}
+.composer{position:sticky;bottom:0;z-index:6;padding:13px 16px;border-top:1px solid #e7ebef;box-shadow:0 -10px 28px rgba(15,23,42,.025)}
+.composer .row{align-items:center}
+.text{min-height:46px}
+.meta{margin-top:7px}
+.meta>span{display:none}
+#globalLeadCta{display:none}
+body.show-lead-cta #globalLeadCta{display:block}
+.footer{display:none}
+body.adviser-active .footer{display:block;margin-bottom:18px}
+
+.quote-card{border-radius:15px}
+.source-note{font-size:9px;opacity:.75}
+.thinking{max-width:340px}
+
+@media(max-width:700px){
+ .topbar{padding:0 16px}
+ .brand span{display:none}
+ .welcome-stage{justify-content:flex-start;padding-top:52px}
+ #halOrb{width:155px;height:155px}
+ .product-btn{padding:9px 13px;font-size:11px}
+ .welcome-bubble{font-size:14px}
+ .shell.adviser-shell{width:100vw;margin:0}
+ body.adviser-active .panel{border-radius:0;border-left:0;border-right:0;min-height:calc(100vh - 58px)}
+ .progress-steps{font-size:9px}
+ .needs-wrap{margin-left:12px;margin-right:12px}
+ .chat{padding:14px 12px 24px}
+ .msg{max-width:92%}
+ .composer{padding:12px}
+ .quotes{width:84vw}
+}
+
+/* ===== HAL 8.3.2 — Single Interface ===== */
+.welcome-stage{
+  justify-content:flex-start;
+  min-height:calc(100vh - 58px);
+  padding-top:42px;
+}
+.stable-adviser{
+  display:none;
+  width:min(820px,94vw);
+  margin-top:24px;
+  text-align:left;
+}
+.stable-adviser.active{
+  display:block;
+  animation:fadeUp .28s ease;
+}
+.stable-adviser .needs-wrap{
+  margin:0 0 12px;
+  background:rgba(255,255,255,.88);
+  border:1px solid #e4e7ec;
+  border-radius:14px;
+  padding:11px 13px;
+}
+.stable-adviser .chat{
+  min-height:0;
+  max-height:none;
+  overflow:visible;
+  padding:0;
+  background:transparent;
+  gap:10px;
+}
+.stable-adviser .msg{
+  max-width:min(690px,88%);
+  box-shadow:0 4px 18px rgba(15,23,42,.025);
+}
+.stable-adviser .msg.hal{
+  background:#fff;
+  border:1px solid #e5e8ed;
+}
+.stable-adviser .msg.user{
+  background:#5747e8;
+}
+body.adviser-active .welcome-stage{
+  display:flex!important;
+}
+body.adviser-active .shell.adviser-shell{
+  display:none!important;
+}
+body.adviser-active .welcome-bubble{
+  display:none;
+}
+body.adviser-active #halOrb{
+  width:168px;
+  height:168px;
+}
+body.adviser-active .product-switch{
+  margin-top:15px;
+  margin-bottom:12px;
+}
+body.adviser-active .welcome-mic-wrap{
+  margin-top:18px;
+}
+body.adviser-active .welcome-input-row{
+  margin-top:12px;
+}
+body.adviser-active .welcome-trust{
+  margin-top:22px;
+}
+body.adviser-active .footer{
+  display:none!important;
+}
+@media(max-width:700px){
+  .welcome-stage{padding:26px 12px 38px}
+  body.adviser-active #halOrb{width:138px;height:138px}
+  .stable-adviser{width:96vw}
+  .stable-adviser .msg{max-width:94%}
+  .welcome-input-row{width:96vw}
+}
+
+
+/* ===== HAL 8.5 — Europesure Travel Engine ===== */
+.travel-card{
+  margin-top:14px;border:1px solid #e5e8ed;border-radius:16px;background:#fff;
+  padding:18px;box-shadow:0 8px 26px rgba(15,23,42,.045)
+}
+.travel-rec{font-size:10px;font-weight:800;color:#5747e8;letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}
+.travel-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.travel-logo{font-size:10px;font-weight:850;letter-spacing:.1em;background:#eef0ff;color:#5747e8;padding:8px 10px;border-radius:9px}
+.travel-plan{font-size:18px;font-weight:820;color:#172333}
+.travel-sub{font-size:11px;color:#7a8796;margin-top:2px}
+.travel-limits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:13px 0}
+.travel-limit{background:#f7f8fa;border-radius:11px;padding:11px}
+.travel-limit b{display:block;font-size:10px;color:#74808e;margin-bottom:4px}
+.travel-limit span{font-size:13px;font-weight:800;color:#172333}
+.travel-why{font-size:12px;line-height:1.55;color:#516071;background:#fafaff;border:1px solid #eceaff;border-radius:11px;padding:11px;margin-bottom:12px}
+.travel-tier-switch{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0 13px}
+.travel-tier{
+ border:1px solid #e0e4e8;background:#fff;border-radius:10px;padding:9px 6px;text-align:center;
+ font-size:10px;font-weight:750;cursor:pointer
+}
+.travel-tier.active{border-color:#7568e8;background:#f4f2ff;color:#5547d6}
+.travel-actions{display:flex;gap:8px;flex-wrap:wrap}
+.travel-primary{display:inline-block;background:#5747e8;color:#fff!important;text-decoration:none;border-radius:10px;padding:11px 14px;font-size:12px;font-weight:800}
+.travel-secondary{border:1px solid #dfe3e8;background:#fff;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:750;cursor:pointer}
+.travel-legacy{font-size:9.5px;color:#8a94a0;margin-top:11px;line-height:1.45}
+@media(max-width:600px){
+ .travel-limits{grid-template-columns:1fr}
+ .travel-tier-switch{grid-template-columns:1fr 1fr 1fr}
+}
+
+</style>
+</head>
+<body data-hal-state="idle">
+<header class="topbar">
+ <div class="brand">ASHLAR ASSURANCE<span>INTERNATIONAL & TRAVEL INSURANCE</span></div>
+ <div class="badge">HAL · Private Insurance Adviser</div>
+</header>
+
+<section class="welcome-stage" id="welcomeStage">
+ <div class="welcome-kicker">Independent insurance guidance</div>
+ <div class="voice-orb-wrap">
+  <canvas id="halOrb" width="220" height="220" onclick="startWelcomeRecording()" aria-label="Speak to HAL"></canvas>
+  <div class="orb-status-main" id="orbStatusMain">Tap to begin</div>
+ </div>
+ <div class="product-switch" role="group" aria-label="Insurance type">
+  <button class="product-btn active" id="welcomeHealth" onclick="setWelcomeProduct('health')">🏥 Health Insurance</button>
+  <button class="product-btn" id="welcomeTravel" onclick="setWelcomeProduct('travel')">✈️ Travel Insurance</button>
+ </div>
+ <div class="welcome-bubble" id="welcomeBubble">Hi, I’m HAL, your insurance adviser. Tell me what you’re looking for and I’ll guide you step by step.</div>
+ <div class="welcome-mic-wrap">
+  <button class="welcome-mic" id="welcomeMic" onclick="startWelcomeRecording()" aria-label="Speak to HAL">🎙</button>
+  <div class="welcome-mic-hint">Speak to HAL, or type below</div>
+ </div>
+ <div class="welcome-input-row">
+  <input class="welcome-input" id="welcomeInput" placeholder="Tell HAL what you need…" onkeydown="if(event.key==='Enter')sendWelcomeText()">
+  <button class="welcome-send" onclick="sendWelcomeText()">Send →</button>
+ </div>
+ <div class="welcome-transcribe" id="welcomeTranscribe"></div>
+
+ <section class="stable-adviser" id="stableAdviser" aria-live="polite">
+   <div id="stableNeedsHost"></div>
+   <div id="stableChatHost"></div>
+ </section>
+ <div class="welcome-trust"><span>Independent advice</span><span>Multiple insurers</span><span>Verified plan data</span></div>
+</section>
+
+<main class="shell adviser-shell" id="adviserShell">
+ <section class="hero"></section>
+ <section class="panel">
+  <div class="panel-head">
+   <div class="hal-id"><div class="hal-mini-orb"></div><div><div class="hal-name">HAL</div><div class="journey-badge" id="journeyBadge">Private Insurance Adviser</div></div></div>
+   <button class="btn soft" onclick="resetHal()">Start again</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-steps"><div class="pstep active" id="ps1"><i>1</i>Understand needs</div><div class="pstep" id="ps2"><i>2</i>Compare plans</div><div class="pstep" id="ps3"><i>3</i>Request proposal</div></div><div class="progress-line"><div class="progress-fill" id="progressFill"></div></div></div>
+  <div class="needs-wrap"><div class="needs-head"><div class="needs-title">Your needs</div><button class="needs-edit" onclick="openNeedsEditor()">Edit</button></div><div class="needs-chips" id="needsChips"><span class="need-empty">Tell HAL what matters to you.</span></div></div>
+  <div class="chat" id="chat"></div>
+  <div class="quick"></div>
+  <div class="composer">
+   <div class="row">
+    <textarea id="input" class="text" placeholder="Tell HAL what you need…" onkeydown="keySend(event)"></textarea>
+    <button class="btn soft mic" id="mic" onclick="startAdviserRecording()" title="Speak to HAL" aria-label="Speak to HAL">🎙</button>
+    <button class="btn primary" id="send" onclick="sendMessage()">Send</button>
+   </div>
+   <div class="transcribe-status" id="transcribeStatus"></div>
+   <div class="meta"><span>HAL checks your requirements before recommending plans.</span><button class="chip" id="voiceButton" onclick="speakLast()">🔊 Hear HAL</button></div>
+   <button class="lead-cta" id="globalLeadCta" onclick="openLeadForm(currentJourney)">Request a proposal / broker review</button>
+  </div>
+ </section>
+</main>
+
+<div class="compare-tray" id="compareTray"><span id="compareCount">0 plans selected</span><button class="compare-clear" onclick="clearCompare()">Clear</button><button class="compare-go" onclick="openCompare()">Compare</button></div>
+<div class="modal-backdrop" id="leadModal" onclick="backdropClose(event)">
+ <div class="modal" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+  <div class="modal-head">
+   <div><h2 id="leadTitle">Request a proposal</h2><div class="modal-sub" id="leadSubtitle">Send your details to Ashlar Assurance for broker review.</div></div>
+   <button class="close" onclick="closeLeadForm()" aria-label="Close">×</button>
+  </div>
+  <form class="form-body" id="leadForm" onsubmit="submitLead(event)">
+   <input class="honeypot" type="text" name="website" id="leadWebsite" autocomplete="off" tabindex="-1">
+   <div class="form-grid">
+    <div class="field"><label>First name *</label><input id="leadFirstName" required maxlength="80"></div>
+    <div class="field"><label>Last name *</label><input id="leadLastName" required maxlength="80"></div>
+    <div class="field"><label>Email *</label><input id="leadEmail" type="email" required maxlength="180"></div>
+    <div class="field"><label>Phone</label><input id="leadPhone" type="tel" maxlength="60"></div>
+    <div class="field"><label>Country of residence</label><input id="leadResidence" maxlength="100"></div>
+    <div class="field"><label>Nationality</label><input id="leadNationality" maxlength="100"></div>
+    <div class="field"><label>Age</label><input id="leadAge" inputmode="numeric" maxlength="3"></div>
+    <div class="field">
+     <label>Insurance interest *</label>
+     <select id="leadInterest" required>
+      <option value="International Health Insurance">International Health Insurance</option>
+      <option value="Travel Insurance">Travel Insurance</option>
+      <option value="Local vs International Review">Local vs International Review</option>
+     </select>
+    </div>
+    <div class="field"><label>Coverage area / destination</label><input id="leadCoverage" maxlength="120" placeholder="e.g. Europe, Worldwide, Spain"></div>
+    <div class="field"><label>Family / travellers</label><input id="leadFamily" maxlength="120" placeholder="e.g. 2 adults + 1 child"></div>
+    <div class="field"><label>Approx. annual budget</label><input id="leadBudget" maxlength="80" placeholder="Optional"></div>
+    <div class="field">
+     <label>Preferred contact</label>
+     <select id="leadContact"><option>Email</option><option>Phone</option><option>Either</option></select>
+    </div>
+    <div class="field full"><label>Anything else you want us to know?</label><textarea id="leadMessage" maxlength="2500" placeholder="Please do not enter detailed medical records or sensitive medical history here."></textarea></div>
+   </div>
+   <label class="consent"><input type="checkbox" id="leadConsent" required><span>I agree that Ashlar Assurance may use the information above to contact me about my insurance enquiry. I understand that this form is not an insurance application and does not confirm cover.</span></label>
+   <div class="privacy-note">HAL will include a short summary of this conversation and the structured insurance preferences already provided, so you do not need to repeat everything.</div>
+   <div id="leadStatus" class="form-status"></div>
+   <div class="form-actions"><button type="button" class="btn soft" onclick="closeLeadForm()">Cancel</button><button type="submit" class="btn primary" id="leadSubmit">Send enquiry</button></div>
+  </form>
+ </div>
+</div>
+
+<div class="modal-backdrop" id="needsModal" onclick="if(event.target===this)closeNeedsEditor()">
+ <div class="modal"><div class="modal-head"><div><h2>Edit your needs</h2><div class="modal-sub">Changes recalculate the shortlist without restarting the conversation.</div></div><button class="close" onclick="closeNeedsEditor()">×</button></div>
+ <div class="form-body"><div class="form-grid">
+  <div class="field"><label>Age</label><input id="needAge" type="number" min="0" max="120"></div>
+  <div class="field"><label>Country of residence</label><input id="needResidence"></div>
+  <div class="field full"><label>Area of cover</label><select id="needArea"><option value="area1">Europe</option><option value="area2">Worldwide excl. USA, Singapore, Hong Kong & China</option><option value="area3">Worldwide excl. USA</option><option value="area4">Worldwide including USA</option></select></div>
+  <div class="field full"><label>Must-have benefits</label><div class="needs-chips" id="needToggleBox"></div></div>
+  <div class="field"><label>Annual budget</label><input id="needBudget" type="number" min="0" placeholder="Optional"></div>
+  <div class="field"><label>Deductible / excess</label><input id="needDeductible" type="number" min="0" placeholder="Optional"></div>
+ </div><div class="form-actions"><button class="btn soft" onclick="closeNeedsEditor()">Cancel</button><button class="btn primary" onclick="saveNeeds()">Update shortlist</button></div></div>
+ </div>
+</div>
+
+<div class="modal-backdrop" id="compareModal" onclick="if(event.target===this)closeCompare()">
+ <div class="modal compare-modal"><div class="modal-head"><div><h2>Compare selected plans</h2><div class="modal-sub">A clear side-by-side view of the shortlisted plans based on the information HAL has verified or loaded.</div></div><button class="close" onclick="closeCompare()">×</button></div>
+ <div class="compare-toolbar"><button class="strong" onclick="openComparisonEmail()">✉ Send me this comparison</button><button onclick="openLeadForm('ipmi')">Request broker review</button></div>
+ <div class="compare-body"><div id="compareContent"></div></div>
+ </div>
+</div>
+
+<div class="modal-backdrop" id="comparisonEmailModal" onclick="if(event.target===this)closeComparisonEmail()">
+ <div class="modal" style="max-width:480px"><div class="modal-head"><div><h2>Send me this comparison</h2><div class="modal-sub">HAL will email the validated selected plans through Ashlar's Gmail account.</div></div><button class="close" onclick="closeComparisonEmail()">×</button></div>
+ <div class="email-mini"><div class="field"><label>Your name</label><input id="comparisonName"></div><div class="field"><label>Email *</label><input id="comparisonEmail" type="email" required></div><label class="consent"><input id="comparisonConsent" type="checkbox" checked><span>Send this comparison to me and allow Ashlar Assurance to follow up about this enquiry.</span></label><div class="form-status" id="comparisonEmailStatus"></div><div class="form-actions"><button class="btn soft" onclick="closeComparisonEmail()">Cancel</button><button class="btn primary" id="comparisonEmailSend" onclick="sendComparisonEmail()">Send comparison</button></div></div>
+ </div>
+</div>
+<div class="footer">HAL is an Ashlar Assurance decision-support tool. Final eligibility, underwriting, cover, benefits and premium remain subject to insurer confirmation and the applicable policy wording.</div>
+<script>
+const chat=document.getElementById('chat'), input=document.getElementById('input'), send=document.getElementById('send');
+let state={}, history=[], lastReply='', lastSources=[], lastKnowledgeSources=[];
+let mediaRecorder=null, mediaStream=null, audioChunks=[], recordingTimer=null, recordingStartedAt=0;
+let currentAudio=null, currentAudioUrl=null, voiceController=null, voiceBusy=false;
+let currentJourney='undetermined', lastQuotes=[], excludedPlans=[], compareSelected=new Set(), policyAnalyzerUrl='https://ashlar-policyanalyzer.up.railway.app/';
+const MUST_FIELDS={outpatient_required:'Outpatient',maternity_required:'Routine maternity',dental_required:'Dental',mental_health_required:'Mental health',wellness_required:'Wellness',optical_required:'Optical',evacuation_required:'Evacuation',chronic_required:'Chronic cover'};
+
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function providerClass(q){const s=(q.insurer||'').toLowerCase();if(s.includes('img'))return 'img';if(s.includes('april'))return 'apr';return ''}
+function money(v,c='EUR'){const n=Number(v||0);try{return new Intl.NumberFormat('en-IE',{style:'currency',currency:c||'EUR',maximumFractionDigits:2}).format(n)}catch(_){return '€'+n.toLocaleString()}}
+function qkey(q){return q.plan_key||`${q.insurer}:${q.product_code}`}
+function quickReplyHtml(items){return items&&items.length?`<div class="answer-options">${items.map(x=>`<button class="answer-option" onclick="sendQuickReply(${JSON.stringify(x.value).replace(/"/g,'&quot;')})">${esc(x.label)}</button>`).join('')}</div>`:''}
+function sendQuickReply(value){input.value=value;sendMessage()}
+
+function eur(v){return '€'+Number(v||0).toLocaleString('en-US',{maximumFractionDigits:0})}
+function renderTravelResult(tr){
+ if(!tr)return '';
+ const alts=(tr.alternatives||[]);
+ const tiers=alts.map(x=>`<button class="travel-tier ${x.tier===tr.tier?'active':''}" onclick="previewTravelTier('${esc(x.tier)}')">${esc(x.name)}<br><span>${eur(x.emergency_medical_eur)} medical</span></button>`).join('');
+ const eligibility=tr.eligible_on_legacy_data!==false;
+ return `<div class="travel-card">
+   <div class="travel-rec">${eligibility?'★ HAL travel starting point':'Eligibility needs confirmation'}</div>
+   <div class="travel-head"><div class="travel-logo">EUROPESURE</div><div><div class="travel-plan">${esc(tr.plan_name||'')}</div><div class="travel-sub">${esc((tr.trip_type==='annual'?'Annual Multi-Trip':'Single Trip')+(tr.destination?' · '+tr.destination:''))}</div></div></div>
+   <div class="travel-limits">
+     <div class="travel-limit"><b>Emergency medical</b><span>${eur(tr.emergency_medical_eur)}</span></div>
+     <div class="travel-limit"><b>Cancellation</b><span>${eur(tr.cancellation_eur)}</span></div>
+     <div class="travel-limit"><b>Baggage</b><span>${eur(tr.baggage_eur)}</span></div>
+   </div>
+   <div class="travel-why">${esc(tr.reason||tr.legacy_fit||'')}</div>
+   <div class="travel-tier-switch">${tiers}</div>
+   <div class="travel-actions">
+     ${eligibility?`<a class="travel-primary" href="${esc(tr.portal_url||'#')}" target="_blank" rel="noopener">Get exact Europesure quote →</a>`:''}
+     <button class="travel-secondary" onclick="openLeadForm('travel')">Ask Ashlar to help</button>
+   </div>
+   <div class="travel-legacy">${esc(tr.client_note||'Legacy HAL product data; confirm current terms and price in the provider portal.')}</div>
+ </div>`;
+}
+async function previewTravelTier(tier){
+ state.travel_tier_preference=tier;
+ try{
+   const r=await fetch('/api/v1/travel/europesure/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({state})});
+   const d=await r.json();
+   if(!r.ok)throw new Error('Travel recommendation unavailable');
+   lastTravelResult=d;
+   addMsg(`Here is the ${d.plan_name} tier for comparison.`,'hal',[],[],null,[],d);
+ }catch(e){addMsg('I could not load that Europesure tier just now.','hal')}
+}
+
+function addMsg(text,who='hal',sources=[],quotes=[],leadCta=null,quickReplies=[],travelResult=null){
+ const box=document.createElement('div');box.className='msg '+who;let out=esc(text).replace(/\n/g,'<br>');
+ if(quotes&&quotes.length){
+  out+='<div class="quotes">';quotes.slice(0,5).forEach((q,i)=>{const annual=Number(q.premium||0),monthly=annual/12,key=qkey(q),selected=compareSelected.has(key);out+=`<div class="quote-card ${q.recommended?'recommended':''}">
+   ${q.recommended?'<div class="rec-ribbon">★ HAL recommends</div>':''}<button class="compare-pick ${selected?'selected':''}" onclick="toggleCompare('${esc(key)}',this)">${selected?'✓ Selected':'＋ Compare'}</button>
+   <div class="q-head"><div class="q-logo ${providerClass(q)}">${esc(q.card_badge||'PLAN')}</div><div><div class="q-plan">${esc(q.product_name||'')}</div><div class="q-provider">${esc(q.insurer||'')}</div></div></div>
+   <div class="q-badges">${(q.fit_badges||[]).map(x=>`<span class="q-badge">${esc(x)}</span>`).join('')}</div>
+   <div class="q-price">${money(annual,q.currency)}<span>/year</span></div><div class="q-month">${money(monthly,q.currency)}/month</div><div class="q-divider"></div>
+   <div class="q-spec"><b>Coverage</b><span>${esc(q.card_coverage||'International medical cover')}</span><b>Annual limit</b><span>${esc(q.card_annual_limit||'See plan schedule')}</span><b>Deductible</b><span>${esc(q.card_deductible||'See selected option')}</span><b>Evacuation</b><span>${esc(q.card_evacuation||'Subject to plan terms')}</span></div>
+   ${(q.must_have_checks||[]).length?`<div class="q-checks">${q.must_have_checks.map(x=>`<span class="q-check">✓ ${esc(x)}</span>`).join('')}</div>`:''}
+   <div class="q-why">${esc(q.card_why||'International health insurance option.')}</div><div class="q-actions"><button class="q-primary" onclick="selectProposal(${i})">Get proposal</button><button class="q-secondary" onclick="tellMeMore(${i})">Tell me more</button></div>${q.client_note?`<div class="q-note">${esc(q.client_note)}</div>`:''}</div>`});out+='</div>';
+  if(excludedPlans&&excludedPlans.length){out+=`<div class="excluded-wrap"><button class="excluded-btn" onclick="toggleExcluded(this)">Why were ${excludedPlans.length} plans excluded?</button><div class="excluded-list">${excludedPlans.map(x=>`<div class="excluded-item"><strong>${esc(x.product_name)}</strong> — ${esc((x.gaps||[]).join(', ')||'Did not meet a must-have requirement')}</div>`).join('')}</div></div>`}
+ }
+ if(travelResult)out+=renderTravelResult(travelResult);
+ if(sources&&sources.length)out+=`<div class="source-note">Sources used: ${sources.map(esc).join(' · ')}</div>`;
+ if(leadCta&&leadCta.show){let label=leadCta.label||'Request a proposal';if(String(state.client_segment||'').includes('hnwi'))label='Request a private consultation';out+=`<button class="lead-cta" onclick="openLeadForm('${esc(leadCta.journey||'undetermined')}')">${esc(label)}</button>`}
+ if(quickReplies&&quickReplies.length){
+   out+=`<div class="guided-choices">${quickReplies.map(x=>`<button class="guided-choice" onclick="sendGuidedChoice('${encodeURIComponent(x.value||x.label||'')}')">${esc(x.label||x.value||'')}</button>`).join('')}</div>`;
+ }
+ box.innerHTML=out;chat.appendChild(box);chat.scrollTop=chat.scrollHeight;updateUX();saveSession();
+}
+function toggleExcluded(btn){const list=btn.nextElementSibling;if(list)list.classList.toggle('open')}
+function toggleCompare(key,btn){if(compareSelected.has(key))compareSelected.delete(key);else compareSelected.add(key);if(btn){btn.classList.toggle('selected',compareSelected.has(key));btn.textContent=compareSelected.has(key)?'✓ Selected':'＋ Compare'}updateCompareTray();saveSession()}
+function updateCompareTray(){const n=compareSelected.size, tray=document.getElementById('compareTray');document.getElementById('compareCount').textContent=`${n} plan${n===1?'':'s'} selected`;tray.classList.toggle('show',n>=2)}
+function clearCompare(){compareSelected.clear();updateCompareTray();document.querySelectorAll('.compare-pick').forEach(b=>{b.classList.remove('selected');b.textContent='＋ Compare'});saveSession()}
+function selectProposal(index){const q=(lastQuotes||[])[index];if(!q)return;state.selected_plan={insurer:q.insurer,product_name:q.product_name,premium:q.premium,currency:q.currency};document.getElementById('leadMessage').value=`Selected plan: ${q.insurer} — ${q.product_name} — ${money(q.premium,q.currency)}/year`;updateUX(3);openLeadForm('ipmi')}
+async function tellMeMore(index){
+ const q=(lastQuotes||[])[index];if(!q)return;
+ showThinking('Checking this plan');
+ try{
+  const r=await fetch('/api/v1/plans/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({applicant_state:state,plan_key:q.plan_key})});
+  const d=await r.json();removeThinking();if(!r.ok)throw new Error(d.detail||'Plan details unavailable');
+  let detail=`<div class="plan-detail"><h4>${esc(d.product_name)} · ${esc(d.insurer)}</h4><div>${esc(d.headline)}</div><div class="fit">${esc(d.fit)}</div><div class="detail-grid">${(d.details||[]).map(x=>`<b>${esc(x.label)}</b><span>${esc(x.value)}</span>`).join('')}</div>${(d.caveats||[]).length?`<div class="detail-caveat"><b>Important conditions</b><br>${d.caveats.map(esc).join('<br>')}</div>`:''}<div class="detail-limit">${esc(d.limitations||'')}</div></div>`;
+  const box=document.createElement('div');box.className='msg hal';box.innerHTML=detail;chat.appendChild(box);chat.scrollTop=chat.scrollHeight;
+ }catch(e){removeThinking();addMsg('I could not load the plan details just now: '+e.message,'hal')}
+}
+
+
+let welcomeProduct='health';
+let recordingSurface='adviser';
+
+function setWelcomeProduct(product){
+ welcomeProduct=product;
+ document.getElementById('welcomeHealth').classList.toggle('active',product==='health');
+ document.getElementById('welcomeTravel').classList.toggle('active',product==='travel');
+ const bubble=document.getElementById('welcomeBubble');
+ bubble.textContent=product==='travel'
+   ? "Planning a trip? Tell me where you're going, for how long and who is travelling. I'll help you identify the right travel cover."
+   : "Hi, I’m HAL, your insurance adviser. Tell me what you’re looking for and I’ll guide you step by step.";
+}
+
+function setOrbState(stateName='idle'){
+ document.body.dataset.halState=stateName;
+ const labels={idle:'Tap to begin',listening:'Listening',thinking:'Checking',speaking:'Speaking'};
+ const status=document.getElementById('orbStatusMain');
+ if(status)status.textContent=labels[stateName]||'';
+}
+window.setOrbState=setOrbState;
+
+(function initVoiceRing(){
+ const cv=document.getElementById('halOrb');if(!cv)return;
+ const cx=cv.getContext('2d'),W=cv.width,H=cv.height,mx=W/2,my=H/2;
+ const BARS=44,R0=47,seeds=Array.from({length:BARS},(_,i)=>((Math.sin(i*12.9898)*43758.5453)%1+1)%1);
+ let t=0;
+ function frame(){
+   cx.clearRect(0,0,W,H);t+=.02;
+   const stateName=document.body.dataset.halState||'idle';
+   const hue=stateName==='listening'?355:stateName==='thinking'?214:246;
+   for(let i=0;i<BARS;i++){
+     const a=(i/BARS)*Math.PI*2-Math.PI/2,seed=seeds[i];let amp;
+     if(stateName==='listening')amp=10+38*Math.abs(Math.sin(t*5+seed*10)*Math.sin(t*2.4+i*.4));
+     else if(stateName==='speaking')amp=9+31*Math.abs(Math.sin(t*4.2+seed*8)*Math.sin(t*1.8+i*.45));
+     else if(stateName==='thinking'){const sweep=(t*2)%(Math.PI*2);let d=Math.abs(a-(sweep-Math.PI));if(d>Math.PI)d=Math.PI*2-d;amp=6+26*Math.max(0,1-d/1.05)}
+     else amp=6+5*Math.sin(t*1.15+i*.35);
+     const r2=R0+Math.max(3,amp);
+     cx.beginPath();cx.moveTo(mx+Math.cos(a)*R0,my+Math.sin(a)*R0);cx.lineTo(mx+Math.cos(a)*r2,my+Math.sin(a)*r2);
+     cx.strokeStyle=`hsl(${hue},72%,${Math.min(70,48+amp/3)}%)`;cx.lineWidth=3;cx.lineCap='round';cx.stroke();
+   }
+   cx.beginPath();cx.arc(mx,my,5,0,Math.PI*2);cx.fillStyle=`hsl(${hue},70%,55%)`;cx.fill();
+   requestAnimationFrame(frame);
+ }
+ frame();
+})();
+
+function activateAdviser(){
+ document.body.classList.add('adviser-active');
+ document.getElementById('welcomeStage').classList.remove('hidden');
+ const stable=document.getElementById('stableAdviser');
+ const needs=document.querySelector('.panel .needs-wrap');
+ const chatBox=document.getElementById('chat');
+ if(stable)stable.classList.add('active');
+ const needsHost=document.getElementById('stableNeedsHost');
+ const chatHost=document.getElementById('stableChatHost');
+ if(needsHost && needs && needs.parentElement!==needsHost)needsHost.appendChild(needs);
+ if(chatHost && chatBox && chatBox.parentElement!==chatHost)chatHost.appendChild(chatBox);
+ updateJourneyBadge();
+ setTimeout(()=>document.getElementById('welcomeInput')?.focus(),80);
+}
+function showWelcome(){
+ document.body.classList.remove('adviser-active','show-lead-cta');
+ document.getElementById('welcomeStage').classList.remove('hidden');
+ document.getElementById('stableAdviser')?.classList.remove('active');
+ setOrbState('idle');
+ const wi=document.getElementById('welcomeInput'); if(wi)wi.value='';
+ const wt=document.getElementById('welcomeTranscribe'); if(wt)wt.textContent='';
+ setWelcomeProduct('health');
+}
+function updateJourneyBadge(){
+ const el=document.getElementById('journeyBadge');if(!el)return;
+ if(currentJourney==='travel')el.textContent='Travel Insurance Adviser';
+ else if(currentJourney==='local_review')el.textContent='Local vs International Review';
+ else el.textContent='International Health Insurance Adviser';
+}
+function sendWelcomeText(){
+ const wi=document.getElementById('welcomeInput');
+ const v=wi.value.trim();if(!v)return;
+ if(!state.journey){
+   state.journey=welcomeProduct==='travel'?'travel':'ipmi';
+   currentJourney=state.journey;
+ }
+ activateAdviser();
+ input.value=v;
+ wi.value='';
+ sendMessage();
+}
+function sendGuidedChoice(encoded){
+ const value=decodeURIComponent(encoded||'');
+ const wi=document.getElementById('welcomeInput');
+ if(wi)wi.value='';
+ input.value=value;
+ sendMessage();
+}
+function startWelcomeRecording(){
+ recordingSurface='welcome';
+ toggleRecording();
+}
+function startAdviserRecording(){
+ recordingSurface='adviser';
+ toggleRecording();
+}
+function toggleRecording(){
+ if(mediaRecorder && mediaRecorder.state==='recording'){
+   stopRecording();
+   return;
+ }
+ startRecording();
+}
+
+function resetHal(){
+ stopVoice();
+ state={};history=[];lastReply='';lastSources=[];lastKnowledgeSources=[];currentJourney='undetermined';lastQuotes=[];excludedPlans=[];lastTravelResult=null;compareSelected.clear();
+ localStorage.removeItem('hal_v8_session');chat.innerHTML='';updateCompareTray();
+ input.value='';
+ const ts=document.getElementById('transcribeStatus');if(ts)ts.textContent='';
+ showWelcome();
+}
+
+function keySend(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function sendPreset(t){input.value=t;sendMessage()}
+
+
+function stateChipEntries(){
+ if(currentJourney==='travel'||state.journey==='travel'){
+   const a=[];
+   if(state.travel_trip_type)a.push(['travel_trip_type',state.travel_trip_type==='annual'?'Annual multi-trip':'Single trip',false]);
+   if(state.travel_destination)a.push(['travel_destination',state.travel_destination,false]);
+   if(state.travel_age!==undefined)a.push(['travel_age',`Oldest age ${state.travel_age}`,false]);
+   if(state.travel_cover_preference)a.push(['travel_cover_preference',`Preference: ${state.travel_cover_preference}`,false]);
+   if(state.travel_tier_preference)a.push(['travel_tier_preference',`Europesure ${String(state.travel_tier_preference).replace(/^./,c=>c.toUpperCase())}`,true]);
+   return a;
+ }
+ const a=[];if(state.age)a.push(['age',`Age ${state.age}`,false]);if(state.residence_country)a.push(['residence_country',state.residence_country,false]);if(state.coverage_area)a.push(['coverage_area',coverageLabel(),false]);if(state.deductible_answered)a.push(['deductible',state.deductible_preference==='flexible'?'Flexible deductible':`Deductible ${money(state.deductible||0,state.currency||'EUR')}`,false]);if(state.outpatient_answered&&!state.outpatient_required)a.push(['outpatient_required','Hospital only',false]);Object.entries(MUST_FIELDS).forEach(([k,l])=>{if(state[k])a.push([k,l,true])});if(state.budget_answered&&!state.budget_annual)a.push(['budget_annual','No fixed budget',false]);else if(state.budget_annual)a.push(['budget_annual',`Budget ${money(state.budget_annual,state.currency||'EUR')}`,false]);return a
+}
+function renderNeeds(){const box=document.getElementById('needsChips'),entries=stateChipEntries();box.innerHTML=entries.length?entries.map(([k,l,m])=>`<button class="need-chip ${m?'must':''}" onclick="openNeedsEditor()">${esc(l)}</button>`).join(''):'<span class="need-empty">Tell HAL what matters to you.</span>'}
+function updateUX(forceStep=0){renderNeeds();updateJourneyBadge();let step=1;if((lastQuotes&&lastQuotes.length)||lastTravelResult)step=2;if(forceStep===3||state.selected_plan)step=3;['ps1','ps2','ps3'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.toggle('active',i+1===step);el.classList.toggle('done',i+1<step)});document.getElementById('progressFill').style.width=step===1?'24%':step===2?'65%':'100%';const useful=Boolean(lastQuotes&&lastQuotes.length)||((currentJourney==='travel'||currentJourney==='local_review')&&history.length>=2);document.body.classList.toggle('show-lead-cta',useful);updateCompareTray()}
+function openNeedsEditor(){document.getElementById('needAge').value=state.age||'';document.getElementById('needResidence').value=state.residence_country||'Greece';document.getElementById('needArea').value=state.coverage_area||'area1';document.getElementById('needBudget').value=state.budget_annual||'';document.getElementById('needDeductible').value=state.deductible||'';document.getElementById('needToggleBox').innerHTML=Object.entries(MUST_FIELDS).map(([k,l])=>`<button type="button" class="need-chip ${state[k]?'must':''}" data-field="${k}" onclick="this.classList.toggle('must')">${esc(l)}</button>`).join('');document.getElementById('needsModal').classList.add('open')}
+function closeNeedsEditor(){document.getElementById('needsModal').classList.remove('open')}
+async function saveNeeds(){state.age=Number(document.getElementById('needAge').value||state.age||0)||undefined;state.residence_country=document.getElementById('needResidence').value.trim()||'Greece';state.coverage_area=document.getElementById('needArea').value;const b=Number(document.getElementById('needBudget').value||0);if(b)state.budget_annual=b;else delete state.budget_annual;const d=Number(document.getElementById('needDeductible').value||0);if(d)state.deductible=d;else delete state.deductible;Object.keys(MUST_FIELDS).forEach(k=>state[k]=false);document.querySelectorAll('#needToggleBox .need-chip.must').forEach(el=>state[el.dataset.field]=true);state.deductible_answered=true;state.deductible_preference=state.deductible!==undefined?'fixed':'flexible';state.outpatient_answered=true;state.maternity_answered=true;state.dental_answered=true;state.mental_health_answered=true;state.evacuation_answered=true;state.budget_answered=true;state.discovery_complete=true;closeNeedsEditor();renderNeeds();saveSession();if(state.age&&state.residence_country&&state.coverage_area){showThinking('Recalculating your shortlist');try{const r=await fetch('/api/v1/quotes/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});const d=await r.json();removeThinking();if(!r.ok)throw new Error(d.detail||'Could not recalculate');lastQuotes=d.shortlist||[];excludedPlans=(d.quotes||[]).filter(q=>q.evidence_confidence===1&&q.requirements_score!==null&&q.requirements_score<1).map(q=>({product_name:q.product_name,gaps:q.unmatched_requirements||[]}));addMsg('I updated the shortlist using your edited needs.','hal',[],lastQuotes,{show:true,journey:'ipmi',label:'Request an international health proposal'})}catch(e){removeThinking();addMsg('I could not recalculate the shortlist just now. Please try again.','hal')}}}
+let thinkingEl=null,thinkingTimer=null;function showThinking(label='HAL is checking your request'){removeThinking();thinkingEl=document.createElement('div');thinkingEl.className='thinking';thinkingEl.innerHTML=`<span id="thinkingLabel">${esc(label)}</span><span class="thinking-dots"><span></span><span></span><span></span></span>`;chat.appendChild(thinkingEl);chat.scrollTop=chat.scrollHeight;const phrases=['Matching your must-have benefits','Checking rates','Comparing providers'];let i=0;thinkingTimer=setInterval(()=>{const e=document.getElementById('thinkingLabel');if(e)e.textContent=phrases[i++%phrases.length]},900)}function removeThinking(){if(thinkingTimer)clearInterval(thinkingTimer);thinkingTimer=null;if(thinkingEl){thinkingEl.remove();thinkingEl=null}}
+function saveSession(){try{localStorage.setItem('hal_v8_session',JSON.stringify({ts:Date.now(),state,lastQuotes,excludedPlans,lastTravelResult,currentJourney,compareSelected:[...compareSelected]}))}catch(_){}}
+function restoreSession(){try{const d=JSON.parse(localStorage.getItem('hal_v8_session')||'null');if(!d||Date.now()-d.ts>86400000)return false;state=d.state||{};lastQuotes=d.lastQuotes||[];excludedPlans=d.excludedPlans||[];lastTravelResult=d.lastTravelResult||null;currentJourney=d.currentJourney||'undetermined';compareSelected=new Set(d.compareSelected||[]);return Object.keys(state).length>0}catch(_){return false}}
+function closeCompare(){document.getElementById('compareModal').classList.remove('open')}
+async function openCompare(){if(compareSelected.size<2)return;try{const r=await fetch('/api/v1/comparison/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({applicant_state:state,selected_keys:[...compareSelected]})});const d=await r.json();if(!r.ok)throw new Error(d.detail||'Comparison unavailable');renderComparison(d.plans||[]);document.getElementById('compareModal').classList.add('open')}catch(e){addMsg('I could not build the comparison: '+e.message,'hal')}}
+function renderComparison(plans){const content=document.getElementById('compareContent');if(!plans.length){content.innerHTML='<p>No plans selected.</p>';return}const rows=[['Annual premium',p=>money(p.premium,p.currency)],['Monthly premium',p=>money(p.monthly,p.currency)],['Coverage',p=>p.card_coverage],['Annual limit',p=>p.card_annual_limit],['Deductible',p=>p.card_deductible],['Evacuation',p=>p.card_evacuation],['Why it fits',p=>p.card_why],['Must-haves',p=>(p.must_have_checks||[]).map(x=>'✓ '+x).join(' · ')||'To confirm']];let html=`<div class="compare-grid" style="--compare-cols:${plans.length}"><div class="compare-row"><div>Plan</div>${plans.map(p=>`<div><div class="compare-plan">${esc(p.product_name)}</div><div class="compare-provider">${esc(p.insurer)}</div></div>`).join('')}</div>`;rows.forEach(([label,fn])=>{html+=`<div class="compare-row"><div>${esc(label)}</div>${plans.map(p=>`<div>${esc(fn(p)||'—')}</div>`).join('')}</div>`});html+='</div>';content.innerHTML=html}
+function openComparisonEmail(){closeCompare();const known=document.getElementById('leadEmail')?.value||'';if(known)document.getElementById('comparisonEmail').value=known;const fn=document.getElementById('leadFirstName')?.value||'',ln=document.getElementById('leadLastName')?.value||'';if(fn||ln)document.getElementById('comparisonName').value=(fn+' '+ln).trim();document.getElementById('comparisonEmailStatus').textContent='';document.getElementById('comparisonEmailModal').classList.add('open')}
+function closeComparisonEmail(){document.getElementById('comparisonEmailModal').classList.remove('open')}
+async function sendComparisonEmail(){const email=document.getElementById('comparisonEmail').value.trim(),name=document.getElementById('comparisonName').value.trim(),consent=document.getElementById('comparisonConsent').checked,status=document.getElementById('comparisonEmailStatus'),btn=document.getElementById('comparisonEmailSend');if(!email){status.className='form-status err';status.textContent='Please enter your email.';return}btn.disabled=true;btn.textContent='Sending…';try{const r=await fetch('/api/v1/comparison/email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({applicant_state:state,selected_keys:[...compareSelected],name,email,consent})});const d=await r.json();if(!r.ok)throw new Error(d.detail||'Could not send comparison');status.className='form-status ok';status.textContent=`Comparison sent — ${d.plans_sent} plans.`;btn.textContent='Sent';setTimeout(closeComparisonEmail,1600)}catch(e){status.className='form-status err';status.textContent=e.message;btn.disabled=false;btn.textContent='Send comparison'}}
+
+function preferredMimeType(){
+ const candidates=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
+ if(!window.MediaRecorder)return '';
+ return candidates.find(t=>MediaRecorder.isTypeSupported(t))||'';
+}
+async function toggleRecording(){
+ if(mediaRecorder && mediaRecorder.state==='recording'){stopRecording();return}
+ await startRecording();
+}
+async function startRecording(){
+ stopVoice();
+ const isWelcome=recordingSurface==='welcome';
+ const mic=document.getElementById(isWelcome?'welcomeMic':'mic');
+ const status=document.getElementById(isWelcome?'welcomeTranscribe':'transcribeStatus');
+
+ if(mediaRecorder && mediaRecorder.state==='recording'){
+   stopRecording();
+   return;
+ }
+ if(!navigator.mediaDevices || !window.MediaRecorder){
+   if(status)status.textContent='Voice recording is not supported by this browser.';
+   setOrbState('idle');
+   return;
+ }
+ try{
+   mediaStream=await navigator.mediaDevices.getUserMedia({
+     audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}
+   });
+   const mime=preferredMimeType();
+   mediaRecorder=mime?new MediaRecorder(mediaStream,{mimeType:mime}):new MediaRecorder(mediaStream);
+   audioChunks=[];
+   recordingStartedAt=Date.now();
+
+   mediaRecorder.ondataavailable=e=>{
+     if(e.data && e.data.size)audioChunks.push(e.data);
+   };
+   mediaRecorder.onerror=e=>{
+     const msg=e?.error?.message||'Recording error';
+     if(status)status.textContent=msg;
+     cleanupRecordingStream();
+     setOrbState('idle');
+   };
+   mediaRecorder.onstop=async()=>{
+     try{ await uploadRecording(); }
+     finally{
+       cleanupRecordingStream();
+       mediaRecorder=null;
+     }
+   };
+
+   mediaRecorder.start(250);
+   setOrbState('listening');
+   if(mic){
+     mic.classList.add('recording');
+     mic.textContent='■';
+     mic.title='Stop and transcribe';
+     mic.setAttribute('aria-label','Stop and transcribe');
+   }
+   if(status)status.textContent='Listening… tap again to stop and transcribe.';
+   recordingTimer=setTimeout(()=>stopRecording(),90000);
+ }catch(e){
+   cleanupRecordingStream();
+   if(status)status.textContent='Microphone permission was not granted.';
+   setOrbState('idle');
+ }
+}
+
+function cleanupRecordingStream(){
+ if(recordingTimer){clearTimeout(recordingTimer);recordingTimer=null}
+ if(mediaStream){
+   mediaStream.getTracks().forEach(t=>{try{t.stop()}catch(_){}});
+   mediaStream=null;
+ }
+}
+
+function stopRecording(){
+ if(recordingTimer){clearTimeout(recordingTimer);recordingTimer=null}
+ const isWelcome=recordingSurface==='welcome';
+ const mic=document.getElementById(isWelcome?'welcomeMic':'mic');
+ const status=document.getElementById(isWelcome?'welcomeTranscribe':'transcribeStatus');
+
+ if(mic){
+   mic.classList.remove('recording');
+   mic.textContent='🎙';
+   mic.title='Speak to HAL';
+   mic.setAttribute('aria-label','Speak to HAL');
+ }
+
+ if(mediaRecorder && mediaRecorder.state==='recording'){
+   if(status)status.textContent='Preparing transcription…';
+   setOrbState('thinking');
+   try{ mediaRecorder.requestData(); }catch(_){}
+   mediaRecorder.stop();
+ }else{
+   cleanupRecordingStream();
+   setOrbState('idle');
+ }
+}
+
+async function uploadRecording(){
+ const isWelcome=recordingSurface==='welcome';
+ const status=document.getElementById(isWelcome?'welcomeTranscribe':'transcribeStatus');
+ const targetInput=document.getElementById(isWelcome?'welcomeInput':'input');
+
+ try{
+   const type=mediaRecorder?.mimeType||'audio/webm';
+   const blob=new Blob(audioChunks,{type});
+   audioChunks=[];
+
+   if(blob.size<800){
+     if(status)status.textContent='The recording was too short. Please try again.';
+     setOrbState('idle');
+     return;
+   }
+
+   if(status)status.textContent='Transcribing…';
+   setOrbState('thinking');
+
+   const ext=type.includes('ogg')?'ogg':type.includes('mp4')?'m4a':'webm';
+   const form=new FormData();
+   form.append('file',blob,'hal-recording.'+ext);
+
+   const r=await fetch('/api/v1/transcribe',{method:'POST',body:form});
+   let d={};
+   try{ d=await r.json(); }catch(_){}
+   if(!r.ok)throw new Error(d.detail||`Transcription failed (${r.status})`);
+
+   const transcript=(d.text||'').trim();
+   if(!transcript)throw new Error('No speech was detected.');
+
+   const current=targetInput.value.trim();
+   targetInput.value=current ? current+' '+transcript : transcript;
+   if(status)status.textContent='Transcription ready — review it, then press Send.';
+   setOrbState('idle');
+   targetInput.focus();
+ }catch(e){
+   if(status)status.textContent='Transcription unavailable: '+e.message;
+   setOrbState('idle');
+ }
+}
+
+async function sendMessage(){
+ const text=input.value.trim();if(!text)return;
+ addMsg(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;send.textContent='…';setOrbState('thinking');showThinking('Understanding your needs');
+ try{
+  const r=await fetch('/api/v1/chat/turn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,state,history:history.slice(0,-1)})});
+  const d=await r.json();removeThinking();if(!r.ok)throw new Error(d.detail||'HAL service error');
+  state=d.state||state;lastReply=d.reply||'';lastSources=d.provider_sources_used||[];lastKnowledgeSources=d.knowledge_sources_used||[];
+  currentJourney=d.journey||state.journey||currentJourney||'undetermined';
+  updateJourneyBadge();
+  lastQuotes=d.quotes||[];excludedPlans=d.excluded_plans||[];lastTravelResult=d.travel_result||null;
+  addMsg(lastReply,'hal',[...lastSources,...lastKnowledgeSources],lastQuotes,d.lead_cta||null,d.quick_replies||[],lastTravelResult);
+  history.push({role:'assistant',content:lastReply});
+  if(d.open_application_form){setTimeout(()=>openLeadForm(currentJourney),350);}
+ }catch(e){
+   removeThinking();console.error("HAL turn error",e);
+   addMsg("I couldn't complete that request just now. Please try once more.");
+ }
+ finally{send.disabled=false;send.textContent='Send';setOrbState('idle');document.getElementById('welcomeInput')?.focus();updateUX();saveSession()}
+}
+
+function journeyInterest(journey){
+ if(journey==='travel')return 'Travel Insurance';
+ if(journey==='local_review')return 'Local vs International Review';
+ return 'International Health Insurance';
+}
+function journeyTitle(journey){
+ if(journey==='travel')return ['Travel insurance enquiry','Tell us about your trip and Ashlar will follow up.'];
+ if(journey==='local_review')return ['Local vs international review','Send your requirements for a broker comparison/review.'];
+ return ['International health insurance proposal','Send your details and Ashlar will follow up with a tailored proposal.'];
+}
+function coverageLabel(){
+ const m={area1:'Europe',area2:'Worldwide excluding USA, Singapore, Hong Kong & China',area3:'Worldwide excluding USA',area4:'Worldwide including USA'};
+ return m[state.coverage_area]||'';
+}
+function openLeadForm(journey='undetermined'){
+ stopVoice();updateUX(3);
+ currentJourney=journey||currentJourney||'undetermined';
+ const modal=document.getElementById('leadModal');
+ const [title,sub]=journeyTitle(currentJourney);
+ document.getElementById('leadTitle').textContent=title;
+ document.getElementById('leadSubtitle').textContent=sub;
+ document.getElementById('leadInterest').value=journeyInterest(currentJourney);
+ if(state.residence_country&&!document.getElementById('leadResidence').value)document.getElementById('leadResidence').value=state.residence_country;
+ if(state.nationality&&!document.getElementById('leadNationality').value)document.getElementById('leadNationality').value=state.nationality;
+ if(state.age&&!document.getElementById('leadAge').value)document.getElementById('leadAge').value=state.age;
+ if(currentJourney==='travel'&&state.travel_destination&&!document.getElementById('leadCoverage').value)document.getElementById('leadCoverage').value=state.travel_destination;
+ if(currentJourney!=='travel'&&state.coverage_area&&!document.getElementById('leadCoverage').value)document.getElementById('leadCoverage').value=coverageLabel();
+ if(state.budget_annual&&!document.getElementById('leadBudget').value)document.getElementById('leadBudget').value=state.budget_annual+' '+(state.currency||'EUR');
+ document.getElementById('leadStatus').textContent='';
+ document.getElementById('leadStatus').className='form-status';
+ modal.classList.add('open');
+ setTimeout(()=>document.getElementById('leadFirstName').focus(),100);
+}
+function closeLeadForm(){document.getElementById('leadModal').classList.remove('open')}
+function backdropClose(e){if(e.target===document.getElementById('leadModal'))closeLeadForm()}
+function conversationText(){
+ return history.slice(-12).map(x=>(x.role==='user'?'Applicant: ':'HAL: ')+x.content).join('\n\n').slice(0,12000);
+}
+function quoteText(){
+ return (lastQuotes||[]).slice(0,5).map(q=>`${q.insurer} | ${q.product_name} | ${q.currency||'EUR'} ${q.premium||''} | ${q.rate_version||''}`).join('\n').slice(0,6000);
+}
+async function submitLead(e){
+ e.preventDefault();
+ const btn=document.getElementById('leadSubmit'), status=document.getElementById('leadStatus');
+ btn.disabled=true;btn.textContent='Sending…';status.textContent='';
+
+ const payload={
+   insurance_interest:document.getElementById('leadInterest').value,
+   first_name:document.getElementById('leadFirstName').value.trim(),
+   last_name:document.getElementById('leadLastName').value.trim(),
+   email:document.getElementById('leadEmail').value.trim(),
+   phone:document.getElementById('leadPhone').value.trim(),
+   residence_country:document.getElementById('leadResidence').value.trim(),
+   nationality:document.getElementById('leadNationality').value.trim(),
+   age:document.getElementById('leadAge').value.trim(),
+   coverage_area:document.getElementById('leadCoverage').value.trim(),
+   family_members:document.getElementById('leadFamily').value.trim(),
+   budget:document.getElementById('leadBudget').value.trim(),
+   preferred_contact:document.getElementById('leadContact').value,
+   message:document.getElementById('leadMessage').value.trim(),
+   hal_applicant_state:JSON.stringify(state).slice(0,5000),
+   hal_conversation:conversationText(),
+   hal_quotes:quoteText(),
+   consent:document.getElementById('leadConsent').checked,
+   website:document.getElementById('leadWebsite').value
+ };
+
+ try{
+   const r=await fetch('/api/v1/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+   let d={};try{d=await r.json()}catch(_){}
+   if(!r.ok)throw new Error(d.detail||'Unable to send enquiry');
+   status.className='form-status ok';
+   status.textContent='Thank you. Your enquiry has been sent. Reference: '+(d.reference||'HAL');
+   btn.textContent='Sent';
+   addMsg(`Thank you. I’ve sent your ${payload.insurance_interest.toLowerCase()} enquiry to Ashlar Assurance. Reference: ${d.reference||'HAL'}`,'hal');
+   setTimeout(closeLeadForm,1800);
+ }catch(err){
+   status.className='form-status err';
+   status.textContent='Could not send the enquiry: '+err.message;
+   btn.disabled=false;btn.textContent='Send enquiry';
+ }
+}
+
+function stopVoice(){
+ if(voiceController){
+   try{voiceController.abort()}catch(e){}
+   voiceController=null;
+ }
+ if(currentAudio){
+   try{currentAudio.pause();currentAudio.currentTime=0}catch(e){}
+   currentAudio=null;
+ }
+ if(currentAudioUrl){
+   try{URL.revokeObjectURL(currentAudioUrl)}catch(e){}
+   currentAudioUrl=null;
+ }
+ voiceBusy=false;
+ const vb=document.getElementById('voiceButton');
+ if(vb){vb.disabled=false;vb.textContent='🔊 Hear HAL'}
+ setOrbState('idle');
+}
+
+async function speakLast(){
+ if(!lastReply)return;
+
+ // If speech is already playing, the button becomes a stop control.
+ if(currentAudio && !currentAudio.paused){
+   stopVoice();
+   return;
+ }
+ if(voiceBusy)return;
+
+ const vb=document.getElementById('voiceButton');
+ voiceBusy=true;
+ if(vb){vb.disabled=true;vb.textContent='Preparing…'}
+
+ try{
+  stopVoice();
+  voiceBusy=true;setOrbState('thinking');
+  if(vb){vb.disabled=true;vb.textContent='Preparing…'}
+
+  const lang=/[\u0370-\u03ff]/.test(lastReply)?'el':'en';
+  voiceController=new AbortController();
+
+  const r=await fetch('/api/v1/voice/tts',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    signal:voiceController.signal,
+    body:JSON.stringify({text:lastReply.slice(0,2400),language:lang})
+  });
+
+  if(!r.ok){
+    let d={};
+    try{d=await r.json()}catch(e){}
+    throw new Error(d.detail||'Voice unavailable');
+  }
+
+  const blob=await r.blob();
+  currentAudioUrl=URL.createObjectURL(blob);
+  currentAudio=new Audio(currentAudioUrl);
+  currentAudio.preload='auto';
+
+  currentAudio.onplay=()=>{
+    voiceBusy=false;setOrbState('speaking');
+    if(vb){vb.disabled=false;vb.textContent='■ Stop HAL'}
+  };
+  currentAudio.onended=()=>stopVoice();
+  currentAudio.onerror=()=>stopVoice();
+
+  await currentAudio.play();
+ }catch(e){
+  if(e.name!=='AbortError'){
+    addMsg("Voice is not available yet: "+e.message);
+  }
+  stopVoice();
+ }
+}
+
+if(restoreSession()){
+ activateAdviser();
+ chat.innerHTML='';addMsg('Welcome back. I restored your insurance preferences from this browser session.','hal',[],lastQuotes,lastQuotes.length?{show:true,journey:currentJourney||'ipmi',label:'Request a proposal'}:null);renderNeeds();updateUX();
+}else{resetHal();}
+</script>
+</body>
+</html>
