@@ -22,7 +22,7 @@ settings=get_settings()
 BASE_DIR=Path(__file__).resolve().parents[2]
 FRONTEND_DIR=BASE_DIR/"frontend"
 
-app=FastAPI(title=settings.app_name,version="8.5.1")
+app=FastAPI(title=settings.app_name,version="8.5.2")
 app.include_router(carriers_router,prefix=settings.api_prefix)
 app.include_router(quotes_router,prefix=settings.api_prefix)
 app.include_router(rates_router,prefix=settings.api_prefix)
@@ -49,7 +49,7 @@ def health():
         "status":"ok",
         "service":settings.app_name,
         "environment":settings.app_env,
-        "version":"8.5.1",
+        "version":"8.5.2",
         "quotation_engine":"active",
         "conversational_ai":"openai_responses_api" if settings.openai_api_key else "not_configured",
         "conversational_model":settings.openai_chat_model if settings.openai_api_key else None,
@@ -87,6 +87,7 @@ def health():
         "composer_position":"sticky_bottom",
         "automatic_tts":"active",
         "guided_short_answer_parser":"active",
+        "guided_numeric_reply_parser":"fixed_v8_5_2",
         "destination_intelligence":["Greece"],
         "morgan_price_rates":"official_2026",
         "morgan_price_benefits":"verified_04_26",

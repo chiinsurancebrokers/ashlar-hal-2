@@ -1,4 +1,4 @@
-# HAL 8.5.1 — OpenAI Adviser + Europesure Travel + Stability Fixes
+# HAL 8.5.2 — OpenAI Adviser + Europesure Travel + Guided Input Fixes
 
 
 This build upgrades Morgan Price Europe from the temporary HAL table to the official 2026 rate workbook and registers the official 2026 policy-document set in the evidence layer.
@@ -408,3 +408,6 @@ being interpreted as health-insurance deductibles or benefits.
 ## v8.5.1 stability fixes
 
 See `docs/V8_5_1_STABILITY_PATCH.md` for journey-reset, guided-answer loop, sticky bottom composer and automatic voice fixes.
+
+## v8.5.2
+Fixes deductible and budget guided replies so numeric quick choices cannot loop.

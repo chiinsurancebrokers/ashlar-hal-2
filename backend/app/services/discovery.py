@@ -6,11 +6,22 @@ NO={"no","n","not needed","no thanks","none","όχι","οχι","δεν με εν
 
 
 def _norm(text: str) -> str:
-    return re.sub(r"\\s+"," ",(text or "").strip().lower())
+    return re.sub(r"\s+"," ",(text or "").strip().lower())
 
 
 def _has_any(text: str, terms: set[str]) -> bool:
     return any(t in text for t in terms)
+
+
+def _extract_amount(text: str) -> float | None:
+    """Extract a simple guided amount such as €500 or Budget €3,000."""
+    m=re.search(r"(?:€|eur)?\s*([0-9][0-9,.]*)", text or "", flags=re.I)
+    if not m:
+        return None
+    try:
+        return float(m.group(1).replace(",",""))
+    except Exception:
+        return None
 
 
 def apply_discovery_answer(message: str, state: dict) -> dict:
@@ -82,13 +93,11 @@ def apply_discovery_answer(message: str, state: dict) -> dict:
             out["deductible_answered"]=True
             out["deductible_preference"]="flexible"
         else:
-            m=re.search(r"(?:€|eur)?\\s*([0-9][0-9,.]*)",text)
-            if m:
-                try:
-                    out["deductible"]=float(m.group(1).replace(",",""))
-                    out["deductible_answered"]=True
-                    out["deductible_preference"]="fixed"
-                except Exception: pass
+            amount=_extract_amount(text)
+            if amount is not None:
+                out["deductible"]=amount
+                out["deductible_answered"]=True
+                out["deductible_preference"]="fixed"
 
     elif pending=="outpatient":
         if any(x in text for x in ["hospital only","inpatient only","hospitalisation only","hospitalization only","νοσοκομειακη μονο","νοσοκομειακή μόνο","μονο νοσοκομ","μόνο νοσοκομ"]):
@@ -121,11 +130,9 @@ def apply_discovery_answer(message: str, state: dict) -> dict:
         if any(x in text for x in ["no fixed budget","no budget","flexible budget","budget flexible","χωρις budget","χωρίς budget","χωρις συγκεκριμενο","χωρίς συγκεκριμένο"]):
             out.update(budget_answered=True,budget_preference="flexible")
         else:
-            m=re.search(r"(?:€|eur)?\\s*([0-9][0-9,.]*)",text)
-            if m:
-                try:
-                    out.update(budget_annual=float(m.group(1).replace(",","")),budget_answered=True,budget_preference="fixed")
-                except Exception: pass
+            amount=_extract_amount(text)
+            if amount is not None:
+                out.update(budget_annual=amount,budget_answered=True,budget_preference="fixed")
 
     if out:
         out["pending_question"]=None

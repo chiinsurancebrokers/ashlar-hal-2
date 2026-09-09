@@ -109,6 +109,6 @@ def test_frontend_contains_travel_card_and_exact_quote_cta():
 
 def test_health_advertises_travel_engine():
     main=(Path(__file__).resolve().parents[1]/"backend/app/main.py").read_text(encoding="utf-8")
-    assert '"version":"8.5.1"' in main
+    assert '"version":"8.5.2"' in main
     assert '"europesure_travel_engine":"active"' in main
     assert '"europesure_data_status":"legacy_unverified_current"' in main

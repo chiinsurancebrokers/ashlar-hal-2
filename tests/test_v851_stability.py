@@ -73,7 +73,7 @@ def test_frontend_moves_real_composer_and_autospeaks():
 
 def test_health_flags_show_stability_patch():
     main=(Path(__file__).resolve().parents[1]/"backend/app/main.py").read_text(encoding="utf-8")
-    assert '"version":"8.5.1"' in main
+    assert '"version":"8.5.2"' in main
     assert '"journey_switch_reset":"active"' in main
     assert '"composer_position":"sticky_bottom"' in main
     assert '"automatic_tts":"active"' in main
