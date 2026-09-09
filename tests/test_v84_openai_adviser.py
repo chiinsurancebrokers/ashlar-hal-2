@@ -46,6 +46,6 @@ def test_no_anthropic_runtime_call_remains():
 
 def test_health_reports_openai_conversation_engine():
     main=(Path(__file__).resolve().parents[1]/"backend/app/main.py").read_text(encoding="utf-8")
-    assert '"version":"8.5.0"' in main
+    assert '"version":"8.5.1"' in main
     assert '"conversational_ai":"openai_responses_api"' in main
     assert '"openai_response_storage":"disabled"' in main

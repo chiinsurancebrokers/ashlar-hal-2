@@ -570,9 +570,22 @@ async def chat_turn(message: str, state: dict, history: list[dict] | None = None
     settings=get_settings()
     greek=_is_greek(message)
 
+    # Travel, IPMI and local-review are isolated journeys. If the user explicitly
+    # changes product, discard the previous journey's structured state and history
+    # before parsing the new request. This prevents Travel -> IPMI contamination.
+    previous_journey=str((state or {}).get("journey") or "undetermined")
+    provisional_journey=classify_journey(message,state)
+    valid_journeys={"travel","ipmi","local_review"}
+    if (
+        previous_journey in valid_journeys
+        and provisional_journey in valid_journeys
+        and provisional_journey != previous_journey
+    ):
+        state={"journey":provisional_journey,"currency":(state or {}).get("currency","EUR")}
+        history=[]
+
     # Travel is a separate product engine. Route it before any IPMI discovery
     # so a travel answer can never be misread as a health deductible/benefit answer.
-    provisional_journey=classify_journey(message,state)
     if provisional_journey=="travel":
         return await travel_turn(message,state,history)
 

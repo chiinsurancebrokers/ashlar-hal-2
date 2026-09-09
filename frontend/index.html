@@ -248,8 +248,26 @@ body.adviser-active .product-switch{
 body.adviser-active .welcome-mic-wrap{
   margin-top:18px;
 }
-body.adviser-active .welcome-input-row{
-  margin-top:12px;
+body.adviser-active .welcome-input-row,
+body.adviser-active .welcome-mic-wrap,
+body.adviser-active .welcome-transcribe{
+  display:none!important;
+}
+body.adviser-active .stable-adviser .composer{
+  display:block;
+  position:sticky;
+  bottom:10px;
+  z-index:30;
+  margin-top:14px;
+  padding:12px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #dfe4ea;
+  border-radius:16px;
+  box-shadow:0 14px 38px rgba(15,23,42,.12);
+  backdrop-filter:blur(12px);
+}
+body.adviser-active .stable-adviser{
+  padding-bottom:8px;
 }
 body.adviser-active .welcome-trust{
   margin-top:22px;
@@ -263,6 +281,7 @@ body.adviser-active .footer{
   .stable-adviser{width:96vw}
   .stable-adviser .msg{max-width:94%}
   .welcome-input-row{width:96vw}
+  body.adviser-active .stable-adviser .composer{bottom:6px;border-radius:14px}
 }
 
 
@@ -328,6 +347,7 @@ body.adviser-active .footer{
  <section class="stable-adviser" id="stableAdviser" aria-live="polite">
    <div id="stableNeedsHost"></div>
    <div id="stableChatHost"></div>
+   <div id="stableComposerHost"></div>
  </section>
  <div class="welcome-trust"><span>Independent advice</span><span>Multiple insurers</span><span>Verified plan data</span></div>
 </section>
@@ -429,7 +449,7 @@ const chat=document.getElementById('chat'), input=document.getElementById('input
 let state={}, history=[], lastReply='', lastSources=[], lastKnowledgeSources=[];
 let mediaRecorder=null, mediaStream=null, audioChunks=[], recordingTimer=null, recordingStartedAt=0;
 let currentAudio=null, currentAudioUrl=null, voiceController=null, voiceBusy=false;
-let currentJourney='undetermined', lastQuotes=[], excludedPlans=[], compareSelected=new Set(), policyAnalyzerUrl='https://ashlar-policyanalyzer.up.railway.app/';
+let currentJourney='undetermined', lastQuotes=[], excludedPlans=[], lastTravelResult=null, compareSelected=new Set(), policyAnalyzerUrl='https://ashlar-policyanalyzer.up.railway.app/';
 const MUST_FIELDS={outpatient_required:'Outpatient',maternity_required:'Routine maternity',dental_required:'Dental',mental_health_required:'Mental health',wellness_required:'Wellness',optical_required:'Optical',evacuation_required:'Evacuation',chronic_required:'Chronic cover'};
 
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -493,7 +513,7 @@ function addMsg(text,who='hal',sources=[],quotes=[],leadCta=null,quickReplies=[]
  if(quickReplies&&quickReplies.length){
    out+=`<div class="guided-choices">${quickReplies.map(x=>`<button class="guided-choice" onclick="sendGuidedChoice('${encodeURIComponent(x.value||x.label||'')}')">${esc(x.label||x.value||'')}</button>`).join('')}</div>`;
  }
- box.innerHTML=out;chat.appendChild(box);chat.scrollTop=chat.scrollHeight;updateUX();saveSession();
+ box.innerHTML=out;chat.appendChild(box);chat.scrollTop=chat.scrollHeight;updateUX();saveSession();scrollConversationBottom();
 }
 function toggleExcluded(btn){const list=btn.nextElementSibling;if(list)list.classList.toggle('open')}
 function toggleCompare(key,btn){if(compareSelected.has(key))compareSelected.delete(key);else compareSelected.add(key);if(btn){btn.classList.toggle('selected',compareSelected.has(key));btn.textContent=compareSelected.has(key)?'✓ Selected':'＋ Compare'}updateCompareTray();saveSession()}
@@ -515,14 +535,68 @@ async function tellMeMore(index){
 let welcomeProduct='health';
 let recordingSurface='adviser';
 
-function setWelcomeProduct(product){
+function applyProductUI(product){
  welcomeProduct=product;
  document.getElementById('welcomeHealth').classList.toggle('active',product==='health');
  document.getElementById('welcomeTravel').classList.toggle('active',product==='travel');
  const bubble=document.getElementById('welcomeBubble');
- bubble.textContent=product==='travel'
+ if(bubble)bubble.textContent=product==='travel'
    ? "Planning a trip? Tell me where you're going, for how long and who is travelling. I'll help you identify the right travel cover."
    : "Hi, I’m HAL, your insurance adviser. Tell me what you’re looking for and I’ll guide you step by step.";
+}
+
+function journeyForProduct(product){return product==='travel'?'travel':'ipmi'}
+
+function explicitJourneyFromText(text){
+ const s=String(text||'').toLowerCase();
+ if(/\b(travel insurance|travel plan|trip insurance|holiday insurance|single trip|annual multi[- ]?trip)\b/.test(s)
+    || /ταξιδιωτικ|ταξίδι|ταξιδι/.test(s))return 'travel';
+ if(/\b(international health insurance|international health|international medical|ipmi|global health insurance)\b/.test(s)
+    || /διεθν(?:ή|η|ές|ες).*(?:ασφάλι|ασφαλι|υγε)/.test(s))return 'ipmi';
+ return null;
+}
+
+function scrollConversationBottom(smooth=true){
+ requestAnimationFrame(()=>{
+   const host=document.getElementById('stableComposerHost');
+   if(host && document.body.classList.contains('adviser-active')){
+     host.scrollIntoView({behavior:smooth?'smooth':'auto',block:'end'});
+   }
+ });
+}
+
+function startFreshJourney(journey,{announce=true}={}){
+ stopVoice();
+ state={journey,currency:'EUR'};
+ history=[];
+ lastReply='';lastSources=[];lastKnowledgeSources=[];
+ lastQuotes=[];excludedPlans=[];lastTravelResult=null;compareSelected.clear();
+ currentJourney=journey;
+ chat.innerHTML='';
+ input.value='';
+ const wi=document.getElementById('welcomeInput');if(wi)wi.value='';
+ localStorage.removeItem('hal_v8_session');
+ applyProductUI(journey==='travel'?'travel':'health');
+ updateCompareTray();renderNeeds();updateUX();updateJourneyBadge();
+ if(announce){
+   const msg=journey==='travel'
+     ? "Travel Insurance selected. I’ve started a fresh travel enquiry."
+     : "International Health Insurance selected. I’ve started a fresh health enquiry.";
+   addMsg(msg,'hal');
+ }
+ saveSession();
+ setTimeout(()=>input?.focus(),60);
+ scrollConversationBottom(false);
+}
+
+function setWelcomeProduct(product){
+ const target=journeyForProduct(product);
+ const active=document.body.classList.contains('adviser-active');
+ if(active && currentJourney!=='undetermined' && currentJourney!==target){
+   startFreshJourney(target,{announce:true});
+   return;
+ }
+ applyProductUI(product);
 }
 
 function setOrbState(stateName='idle'){
@@ -562,15 +636,19 @@ function activateAdviser(){
  document.body.classList.add('adviser-active');
  document.getElementById('welcomeStage').classList.remove('hidden');
  const stable=document.getElementById('stableAdviser');
- const needs=document.querySelector('.panel .needs-wrap');
+ const needs=document.querySelector('.needs-wrap');
  const chatBox=document.getElementById('chat');
+ const composer=document.querySelector('.composer');
  if(stable)stable.classList.add('active');
  const needsHost=document.getElementById('stableNeedsHost');
  const chatHost=document.getElementById('stableChatHost');
+ const composerHost=document.getElementById('stableComposerHost');
  if(needsHost && needs && needs.parentElement!==needsHost)needsHost.appendChild(needs);
  if(chatHost && chatBox && chatBox.parentElement!==chatHost)chatHost.appendChild(chatBox);
+ if(composerHost && composer && composer.parentElement!==composerHost)composerHost.appendChild(composer);
+ applyProductUI(currentJourney==='travel'?'travel':'health');
  updateJourneyBadge();
- setTimeout(()=>document.getElementById('welcomeInput')?.focus(),80);
+ setTimeout(()=>input?.focus(),80);
 }
 function showWelcome(){
  document.body.classList.remove('adviser-active','show-lead-cta');
@@ -607,7 +685,7 @@ function sendGuidedChoice(encoded){
  sendMessage();
 }
 function startWelcomeRecording(){
- recordingSurface='welcome';
+ recordingSurface=document.body.classList.contains('adviser-active')?'adviser':'welcome';
  toggleRecording();
 }
 function startAdviserRecording(){
@@ -626,6 +704,7 @@ function resetHal(){
  stopVoice();
  state={};history=[];lastReply='';lastSources=[];lastKnowledgeSources=[];currentJourney='undetermined';lastQuotes=[];excludedPlans=[];lastTravelResult=null;compareSelected.clear();
  localStorage.removeItem('hal_v8_session');chat.innerHTML='';updateCompareTray();
+ applyProductUI('health');
  input.value='';
  const ts=document.getElementById('transcribeStatus');if(ts)ts.textContent='';
  showWelcome();
@@ -652,7 +731,7 @@ function updateUX(forceStep=0){renderNeeds();updateJourneyBadge();let step=1;if(
 function openNeedsEditor(){document.getElementById('needAge').value=state.age||'';document.getElementById('needResidence').value=state.residence_country||'Greece';document.getElementById('needArea').value=state.coverage_area||'area1';document.getElementById('needBudget').value=state.budget_annual||'';document.getElementById('needDeductible').value=state.deductible||'';document.getElementById('needToggleBox').innerHTML=Object.entries(MUST_FIELDS).map(([k,l])=>`<button type="button" class="need-chip ${state[k]?'must':''}" data-field="${k}" onclick="this.classList.toggle('must')">${esc(l)}</button>`).join('');document.getElementById('needsModal').classList.add('open')}
 function closeNeedsEditor(){document.getElementById('needsModal').classList.remove('open')}
 async function saveNeeds(){state.age=Number(document.getElementById('needAge').value||state.age||0)||undefined;state.residence_country=document.getElementById('needResidence').value.trim()||'Greece';state.coverage_area=document.getElementById('needArea').value;const b=Number(document.getElementById('needBudget').value||0);if(b)state.budget_annual=b;else delete state.budget_annual;const d=Number(document.getElementById('needDeductible').value||0);if(d)state.deductible=d;else delete state.deductible;Object.keys(MUST_FIELDS).forEach(k=>state[k]=false);document.querySelectorAll('#needToggleBox .need-chip.must').forEach(el=>state[el.dataset.field]=true);state.deductible_answered=true;state.deductible_preference=state.deductible!==undefined?'fixed':'flexible';state.outpatient_answered=true;state.maternity_answered=true;state.dental_answered=true;state.mental_health_answered=true;state.evacuation_answered=true;state.budget_answered=true;state.discovery_complete=true;closeNeedsEditor();renderNeeds();saveSession();if(state.age&&state.residence_country&&state.coverage_area){showThinking('Recalculating your shortlist');try{const r=await fetch('/api/v1/quotes/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});const d=await r.json();removeThinking();if(!r.ok)throw new Error(d.detail||'Could not recalculate');lastQuotes=d.shortlist||[];excludedPlans=(d.quotes||[]).filter(q=>q.evidence_confidence===1&&q.requirements_score!==null&&q.requirements_score<1).map(q=>({product_name:q.product_name,gaps:q.unmatched_requirements||[]}));addMsg('I updated the shortlist using your edited needs.','hal',[],lastQuotes,{show:true,journey:'ipmi',label:'Request an international health proposal'})}catch(e){removeThinking();addMsg('I could not recalculate the shortlist just now. Please try again.','hal')}}}
-let thinkingEl=null,thinkingTimer=null;function showThinking(label='HAL is checking your request'){removeThinking();thinkingEl=document.createElement('div');thinkingEl.className='thinking';thinkingEl.innerHTML=`<span id="thinkingLabel">${esc(label)}</span><span class="thinking-dots"><span></span><span></span><span></span></span>`;chat.appendChild(thinkingEl);chat.scrollTop=chat.scrollHeight;const phrases=['Matching your must-have benefits','Checking rates','Comparing providers'];let i=0;thinkingTimer=setInterval(()=>{const e=document.getElementById('thinkingLabel');if(e)e.textContent=phrases[i++%phrases.length]},900)}function removeThinking(){if(thinkingTimer)clearInterval(thinkingTimer);thinkingTimer=null;if(thinkingEl){thinkingEl.remove();thinkingEl=null}}
+let thinkingEl=null,thinkingTimer=null;function showThinking(label='HAL is checking your request'){removeThinking();thinkingEl=document.createElement('div');thinkingEl.className='thinking';thinkingEl.innerHTML=`<span id="thinkingLabel">${esc(label)}</span><span class="thinking-dots"><span></span><span></span><span></span></span>`;chat.appendChild(thinkingEl);chat.scrollTop=chat.scrollHeight;scrollConversationBottom();const phrases=['Matching your must-have benefits','Checking rates','Comparing providers'];let i=0;thinkingTimer=setInterval(()=>{const e=document.getElementById('thinkingLabel');if(e)e.textContent=phrases[i++%phrases.length]},900)}function removeThinking(){if(thinkingTimer)clearInterval(thinkingTimer);thinkingTimer=null;if(thinkingEl){thinkingEl.remove();thinkingEl=null}}
 function saveSession(){try{localStorage.setItem('hal_v8_session',JSON.stringify({ts:Date.now(),state,lastQuotes,excludedPlans,lastTravelResult,currentJourney,compareSelected:[...compareSelected]}))}catch(_){}}
 function restoreSession(){try{const d=JSON.parse(localStorage.getItem('hal_v8_session')||'null');if(!d||Date.now()-d.ts>86400000)return false;state=d.state||{};lastQuotes=d.lastQuotes||[];excludedPlans=d.excludedPlans||[];lastTravelResult=d.lastTravelResult||null;currentJourney=d.currentJourney||'undetermined';compareSelected=new Set(d.compareSelected||[]);return Object.keys(state).length>0}catch(_){return false}}
 function closeCompare(){document.getElementById('compareModal').classList.remove('open')}
@@ -804,23 +883,42 @@ async function uploadRecording(){
 }
 
 async function sendMessage(){
- const text=input.value.trim();if(!text)return;
- addMsg(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;send.textContent='…';setOrbState('thinking');showThinking('Understanding your needs');
+ let text=input.value.trim();if(!text)return;
+
+ // A clear product-change request starts a fresh isolated conversation before
+ // the message is sent. This keeps Travel and IPMI chat/state completely separate.
+ const requestedJourney=explicitJourneyFromText(text);
+ if(requestedJourney && currentJourney!=='undetermined' && requestedJourney!==currentJourney){
+   startFreshJourney(requestedJourney,{announce:false});
+   input.value=text;
+ }
+
+ stopVoice();
+ addMsg(text,'user');history.push({role:'user',content:text});input.value='';
+ send.disabled=true;send.textContent='…';setOrbState('thinking');showThinking('Understanding your needs');
+ let shouldSpeak=false;
  try{
   const r=await fetch('/api/v1/chat/turn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,state,history:history.slice(0,-1)})});
   const d=await r.json();removeThinking();if(!r.ok)throw new Error(d.detail||'HAL service error');
   state=d.state||state;lastReply=d.reply||'';lastSources=d.provider_sources_used||[];lastKnowledgeSources=d.knowledge_sources_used||[];
   currentJourney=d.journey||state.journey||currentJourney||'undetermined';
+  applyProductUI(currentJourney==='travel'?'travel':'health');
   updateJourneyBadge();
   lastQuotes=d.quotes||[];excludedPlans=d.excluded_plans||[];lastTravelResult=d.travel_result||null;
   addMsg(lastReply,'hal',[...lastSources,...lastKnowledgeSources],lastQuotes,d.lead_cta||null,d.quick_replies||[],lastTravelResult);
   history.push({role:'assistant',content:lastReply});
+  shouldSpeak=Boolean(lastReply);
   if(d.open_application_form){setTimeout(()=>openLeadForm(currentJourney),350);}
  }catch(e){
    removeThinking();console.error("HAL turn error",e);
    addMsg("I couldn't complete that request just now. Please try once more.");
  }
- finally{send.disabled=false;send.textContent='Send';setOrbState('idle');document.getElementById('welcomeInput')?.focus();updateUX();saveSession()}
+ finally{
+   send.disabled=false;send.textContent='Send';
+   if(!shouldSpeak)setOrbState('idle');
+   input?.focus();updateUX();saveSession();scrollConversationBottom();
+ }
+ if(shouldSpeak)speakLast(true);
 }
 
 function journeyInterest(journey){
@@ -925,7 +1023,7 @@ function stopVoice(){
  setOrbState('idle');
 }
 
-async function speakLast(){
+async function speakLast(silent=false){
  if(!lastReply)return;
 
  // If speech is already playing, the button becomes a stop control.
@@ -975,7 +1073,8 @@ async function speakLast(){
   await currentAudio.play();
  }catch(e){
   if(e.name!=='AbortError'){
-    addMsg("Voice is not available yet: "+e.message);
+    if(silent)console.warn("HAL automatic voice unavailable",e);
+    else addMsg("Voice is not available yet: "+e.message);
   }
   stopVoice();
  }

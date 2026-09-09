@@ -1,4 +1,4 @@
-# HAL 8.5 — OpenAI Adviser + Europesure Travel Engine
+# HAL 8.5.1 — OpenAI Adviser + Europesure Travel + Stability Fixes
 
 
 This build upgrades Morgan Price Europe from the temporary HAL table to the official 2026 rate workbook and registers the official 2026 policy-document set in the evidence layer.
@@ -404,3 +404,7 @@ and premium must be confirmed through the Europesure portal before purchase.
 
 Travel and IPMI discovery are separated before parsing, preventing travel answers from
 being interpreted as health-insurance deductibles or benefits.
+
+## v8.5.1 stability fixes
+
+See `docs/V8_5_1_STABILITY_PATCH.md` for journey-reset, guided-answer loop, sticky bottom composer and automatic voice fixes.

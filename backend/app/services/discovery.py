@@ -21,6 +21,62 @@ def apply_discovery_answer(message: str, state: dict) -> dict:
     text=_norm(message)
     out={}
 
+    # Core identity/location answers must also work as short guided replies.
+    # Without this, answers such as "Greece" / "in Greece" can loop forever
+    # while HAL is waiting for residence.
+    if pending=="age":
+        m=re.search(r"\b(\d{1,3})\b",text)
+        if m:
+            age=int(m.group(1))
+            if 0 <= age <= 120:
+                out["age"]=age
+
+    elif pending=="residence":
+        raw=text.strip(" .,!?:;")
+        aliases={
+            "greece":"Greece","hellas":"Greece","ελλάδα":"Greece","ελλαδα":"Greece",
+            "uk":"United Kingdom","u.k.":"United Kingdom","united kingdom":"United Kingdom",
+            "england":"United Kingdom",
+            "usa":"United States","u.s.a.":"United States","united states":"United States",
+            "united states of america":"United States",
+        }
+        # Strip common answer prefixes while preserving the actual country.
+        cleaned=re.sub(
+            r"^(?:i\s+(?:live|reside)\s+in|i'?m\s+(?:living|resident)\s+in|"
+            r"living\s+in|resident\s+in|residing\s+in|in|"
+            r"μένω\s+(?:στη|στην|στο|σε)|μενω\s+(?:στη|στην|στο|σε)|"
+            r"κατοικώ\s+(?:στη|στην|στο|σε)|κατοικω\s+(?:στη|στην|στο|σε))\s+",
+            "",
+            raw,
+            flags=re.I,
+        ).strip(" .,!?:;")
+        canonical=aliases.get(cleaned.lower())
+        if canonical:
+            out["residence_country"]=canonical
+        elif cleaned and len(cleaned)<=80 and re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿΑ-Ωα-ωΆ-ώ .'-]+",cleaned):
+            out["residence_country"]=" ".join(part.capitalize() for part in cleaned.split())
+
+    elif pending=="coverage_area":
+        if any(x in text for x in [
+            "worldwide including usa","worldwide incl usa","including usa",
+            "worldwide with usa","με ηπα","με usa",
+        ]):
+            out["coverage_area"]="area4"
+        elif any(x in text for x in [
+            "worldwide excluding usa, singapore, hong kong","worldwide excluding usa singapore hong kong",
+            "excluding usa, singapore","excl usa singapore","area 2",
+        ]):
+            out["coverage_area"]="area2"
+        elif any(x in text for x in [
+            "worldwide excluding usa","worldwide excl usa","excluding usa","without usa",
+            "χωρίς ηπα","χωρις ηπα",
+        ]):
+            out["coverage_area"]="area3"
+        elif any(x in text for x in [
+            "europe","europe only","eu only","ευρώπη","ευρωπη",
+        ]):
+            out["coverage_area"]="area1"
+
     if pending=="deductible":
         if any(x in text for x in ["flexible","no preference","any deductible","whatever","χωρις προτιμηση","χωρίς προτίμηση","ευελικ"]):
             out["deductible_answered"]=True
