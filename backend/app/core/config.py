@@ -43,6 +43,11 @@ class Settings(BaseSettings):
     # Advanced comparison app
     policy_analyzer_url: str = "https://ashlar-policyanalyzer.up.railway.app/"
 
+    hal_engine_version: str = "v1"
+    hal_deductible_model_enabled: bool = False
+    hal_family_discount_pct: float = 0.05
+    hal_quote_validity_days: int = 30
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
